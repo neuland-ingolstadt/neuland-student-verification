@@ -1,4 +1,4 @@
-import { getUserManagement } from "@/etc/users"
+import { getUserManagement } from '@/etc/users'
 import jwt from 'jsonwebtoken'
 
 interface FinishToken extends jwt.JwtPayload {
@@ -6,7 +6,7 @@ interface FinishToken extends jwt.JwtPayload {
     email: string
 }
 
-export async function POST(request: Request) {
+export async function POST (request: Request) {
   const formData = await request.formData()
   const token = formData.get('token') as string
 
@@ -18,6 +18,5 @@ export async function POST(request: Request) {
 
   await userManagement.updateUser(privateEmail, email, new Date())
 
-  return Response.json({ 'ok': true })
+  return Response.json({ ok: true })
 }
-  

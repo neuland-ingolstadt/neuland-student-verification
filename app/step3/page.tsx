@@ -1,23 +1,23 @@
 'use client'
 
-import { FormEvent } from "react"
-import { useSearchParams, useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from 'next/navigation'
+import { FormEvent } from 'react'
 
-export default function Page() {
+export default function Page () {
   const params = useSearchParams()
   const router = useRouter()
   const token = params.get('token') ?? ''
 
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+  async function onSubmit (event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
- 
+
     const formData = new FormData(event.currentTarget)
     const response = await fetch('/api/step3', {
       method: 'POST',
-      body: formData,
+      body: formData
     })
 
-    if (response.status == 200) {
+    if (response.status === 200) {
       router.push('/step3/done')
     } else {
       alert(await response.text())

@@ -1,23 +1,21 @@
 'use client'
 
-import { FormEvent } from "react"
-import { useSearchParams, useRouter } from "next/navigation"
+import { FormEvent } from 'react'
+import { useRouter } from 'next/navigation'
 
-export default function Page() {
-  const params = useSearchParams()
-  const token = params.get('token')
+export default function Page () {
   const router = useRouter()
 
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+  async function onSubmit (event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
- 
+
     const formData = new FormData(event.currentTarget)
     const response = await fetch('/api/step1', {
       method: 'POST',
-      body: formData,
+      body: formData
     })
 
-    if (response.status == 200) {
+    if (response.status === 200) {
       const email = formData.get('email') as string
       router.push(`/step1/done?email=${encodeURIComponent(email)}`)
     } else {
@@ -25,7 +23,7 @@ export default function Page() {
       alert(error)
     }
   }
-  
+
   return (
     <form onSubmit={onSubmit}>
       <p>
@@ -35,7 +33,7 @@ export default function Page() {
       <p>
         Bitte gib deine private E-Mail-Adresse ein, um fortzufahren:
       </p>
-      <input type="email" name="email" required  />
+      <input type="email" name="email" required />
       <input type="submit" />
     </form>
   )

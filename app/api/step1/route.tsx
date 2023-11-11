@@ -1,8 +1,8 @@
-import { transporter } from "@/etc/mailer"
-import { getUserManagement } from "@/etc/users"
+import { getUserManagement } from '@/etc/users'
 import jwt from 'jsonwebtoken'
+import { transporter } from '@/etc/mailer'
 
-export async function POST(request: Request) {
+export async function POST (request: Request) {
   const formData = await request.formData()
   const email = formData.get('email') as string
   const secret = process.env.JWT_SECRET as string
@@ -15,7 +15,7 @@ export async function POST(request: Request) {
       from: 'noreply@neuland-ingolstadt.de',
       to: email,
       subject: 'Verifikation des Studierendenstatus fortsetzen',
-      text: `Bitte klicke auf diesen Link, um den Verifikationsprozess fortzusetzen:\n${process.env.BASE_URL}step2?token=${token}`,
+      text: `Bitte klicke auf diesen Link, um den Verifikationsprozess fortzusetzen:\n${process.env.BASE_URL}step2?token=${token}`
     })
     return Response.json({})
   } else {
