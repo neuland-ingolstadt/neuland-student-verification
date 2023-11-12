@@ -1,4 +1,4 @@
-import { getUserManagement } from '@/etc/users'
+import { EasyVereinUserManagement } from '@/etc/easyverein-user-management'
 import jwt from 'jsonwebtoken'
 
 interface FinishToken extends jwt.JwtPayload {
@@ -14,9 +14,9 @@ export async function POST (request: Request) {
 
   const { email, privateEmail } = jwt.verify(token, secret) as FinishToken
 
-  const userManagement = getUserManagement()
+  const userManagement = new EasyVereinUserManagement()
 
   await userManagement.updateUser(privateEmail, email, new Date())
 
-  return Response.json({ ok: true })
+  return Response.json({ })
 }
