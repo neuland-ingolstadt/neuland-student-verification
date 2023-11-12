@@ -6,6 +6,8 @@ interface FinishToken extends jwt.JwtPayload {
     email: string
 }
 
+const JWT_SECRET = process.env.JWT_SECRET!
+
 /**
  * Mark the user as verified.
  */
@@ -13,9 +15,7 @@ export async function POST (request: Request) {
   const formData = await request.formData()
   const token = formData.get('token') as string
 
-  const secret = process.env.JWT_SECRET as string
-
-  const { email, privateEmail } = jwt.verify(token, secret) as FinishToken
+  const { email, privateEmail } = jwt.verify(token, JWT_SECRET) as FinishToken
 
   const userManagement = getUserManagement()
 
