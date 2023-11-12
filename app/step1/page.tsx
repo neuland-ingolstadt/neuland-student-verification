@@ -28,14 +28,20 @@ export default function Page () {
     <form onSubmit={onSubmit}>
       <h1>Schritt 1: Einloggen</h1>
       <p>
-        Um deinen Studierendenstatus zu verifizieren, schicken wir zuerst eine E-Mail an deine private E-Mail-Adresse um deine Identität zu bestätigen.
-        Danach schicken wir eine E-Mail an deine Hochschul-E-Mail-Adresse um deinen Studierendenstatus zu verifizieren.
+        Als Studierender bist du bei Neuland Ingolstadt e.V. vom Mitgliedsbeitrag befreit.
       </p>
       <p>
-        Bitte gib deine private E-Mail-Adresse ein, um fortzufahren:
+        Um deinen Studierendenstatus zu verifizieren, schicken wir zunächst eine E-Mail an deine private E-Mail-Adresse um deine Identität zu verifizieren.
+        Danach schicken wir eine E-Mail an deine THI-E-Mail-Adresse, um deine Hochschulzugehörigkeit zu überprüfen.
       </p>
-      <input type="email" name="email" required />
-      <input type="submit" />
+      <p>
+        Bitte gib die E-Mail-Adresse ein, die du auf deinem Mitgliedsantrag angegeben hast (nicht deine @neuland-ingolstadt.de Adresse):
+      </p>
+      <p>
+        <strong>Private E-Mail-Adresse: </strong>
+        <input type="email" name="email" required />
+      </p>
+      <input type="submit" value="Fortfahren" />
     </form>
   )
 }

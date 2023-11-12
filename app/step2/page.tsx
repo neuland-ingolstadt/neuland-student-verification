@@ -30,11 +30,14 @@ export default function Page () {
     <form onSubmit={onSubmit}>
       <h1>Schritt 2: Hochschulzugehörigkeit überprüfen</h1>
       <p>
-        Bitte gib deine THI-E-Mail-Adresse ein, um die Verifikation abzuschließen:
+        Bitte gib deine THI-E-Mail-Adresse ein, um deine Hochschulzugehörigkeit zu überprüfen:
+      </p>
+      <p>
+        <strong>THI-E-Mail-Adresse: </strong>
+        <input type="email" name="email" pattern=".*@thi.de" required />
       </p>
       <input type="hidden" name="token" value={token} />
-      <input type="email" name="email" pattern=".*@thi.de" required />
-      <input type="submit" />
+      <input type="submit" value="Fortfahren" />
     </form>
   )
 }

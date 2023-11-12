@@ -28,14 +28,14 @@ export default function Page () {
     <form onSubmit={onSubmit}>
       <h1>Schritt 3: Abschließen</h1>
       <p>
-        Bitte schließe die Verifikation deines Studierendenstatus ab.
+        Bitte schließe die Verifikation ab.
       </p>
       <p>
         <input type="checkbox" id="isStudent" required />
         <label htmlFor="isStudent">Ich bestätige, dass ich am 15.03. dieses Jahres an der Technischen Hochschule Ingolstadt immatriukliert war oder sein werde.</label>
       </p>
       <input type="hidden" name="token" value={token} />
-      <input type="submit" />
+      <input type="submit" value="Speichern" />
     </form>
   )
 }
