@@ -1,4 +1,4 @@
-import { User, UserManagement } from './types'
+import { User, UserManagement } from '../types'
 
 export class WeblingUserManagement implements UserManagement {
   async getUser (email: string): Promise<User | null> {

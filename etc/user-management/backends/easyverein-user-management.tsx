@@ -1,5 +1,5 @@
-import { User, UserManagement } from './types'
-import { EasyVereinClient } from './easyverein/client'
+import { User, UserManagement } from '../types'
+import { EasyVereinClient } from '../../easyverein'
 
 const EASYVEREIN_EMAIL_CF = Number(process.env.EASYVEREIN_EMAIL_CF)
 const EASYVEREIN_DATE_CF = Number(process.env.EASYVEREIN_DATE_CF)

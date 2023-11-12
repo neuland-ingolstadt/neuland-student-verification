@@ -1,5 +1,5 @@
-import { EasyVereinUserManagement } from './easyverein-user-management'
-import { WeblingUserManagement } from './webling-user-management'
+import { EasyVereinUserManagement } from './backends/easyverein-user-management'
+import { WeblingUserManagement } from './backends/webling-user-management'
 
 export function getUserManagement () {
   if (process.env.BACKEND === 'easyverein') {
