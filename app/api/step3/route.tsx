@@ -6,17 +6,28 @@ interface FinishToken extends jwt.JwtPayload {
     email: string
 }
 
+const JWT_SECRET = process.env.JWT_SECRET!
+
+/**
+ * Mark the user as verified.
+ */
 export async function POST (request: Request) {
   const formData = await request.formData()
   const token = formData.get('token') as string
 
-  const secret = process.env.JWT_SECRET as string
+  try {
+    const { email, privateEmail } = jwt.verify(token, JWT_SECRET) as FinishToken
 
-  const { email, privateEmail } = jwt.verify(token, secret) as FinishToken
+    const userManagement = getUserManagement()
 
-  const userManagement = getUserManagement()
+    await userManagement.updateUser(privateEmail, email, new Date())
 
-  await userManagement.updateUser(privateEmail, email, new Date())
-
-  return Response.json({ })
+    return new Response()
+  } catch (e) {
+    if (e instanceof jwt.TokenExpiredError) {
+      return new Response('Token expired', { status: 410 })
+    } else {
+      throw e
+    }
+  }
 }
