@@ -1,4 +1,4 @@
-import { EasyVereinUserManagement } from '@/etc/easyverein-user-management'
+import { getUserManagement } from '@/etc/user-management'
 import jwt from 'jsonwebtoken'
 import { transporter } from '@/etc/mailer'
 
@@ -9,7 +9,7 @@ export async function POST (request: Request) {
 
   const token = jwt.sign({ email }, secret, { expiresIn: '1h' })
 
-  const userManagement = new EasyVereinUserManagement()
+  const userManagement = getUserManagement()
   if (await userManagement.getUser(email) != null) {
     transporter.sendMail({
       from: 'noreply@neuland-ingolstadt.de',

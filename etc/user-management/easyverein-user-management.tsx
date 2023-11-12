@@ -1,4 +1,4 @@
-import { User, UserManagement } from './user-management'
+import { User, UserManagement } from './types'
 import { EasyVereinClient } from './easyverein/client'
 
 const EASYVEREIN_EMAIL_CF = Number(process.env.EASYVEREIN_EMAIL_CF)
