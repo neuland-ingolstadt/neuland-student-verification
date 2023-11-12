@@ -1,11 +1,12 @@
 'use client'
 
+import { FormEvent, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { FormEvent } from 'react'
 
 export default function Page () {
   const params = useSearchParams()
   const router = useRouter()
+  const [error, setError] = useState<string | null>(null)
   const token = params.get('token') ?? ''
 
   async function onSubmit (event: FormEvent<HTMLFormElement>) {
@@ -20,7 +21,7 @@ export default function Page () {
     if (response.status === 200) {
       router.push('/step3/done')
     } else {
-      alert(await response.text())
+      setError(await response.text())
     }
   }
 
@@ -36,6 +37,7 @@ export default function Page () {
       </p>
       <input type="hidden" name="token" value={token} />
       <input type="submit" value="Speichern" />
+      {error && <p><strong>Fehler: </strong>{error}</p>}
     </form>
   )
 }

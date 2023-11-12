@@ -22,8 +22,8 @@ export async function POST (request: Request) {
       subject: 'Verifikation des Studierendenstatus fortsetzen',
       text: `Bitte klicke auf diesen Link, um den Verifikationsprozess fortzusetzen:\n${process.env.BASE_URL}step2?token=${token}`
     })
-    return Response.json({})
+    return new Response()
   } else {
-    return Response.json({ error: 'user not found' }, { status: 404 })
+    return new Response('User not found', { status: 404 })
   }
 }

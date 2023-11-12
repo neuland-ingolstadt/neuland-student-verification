@@ -1,10 +1,11 @@
 'use client'
 
-import { FormEvent } from 'react'
+import { FormEvent, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 export default function Page () {
   const router = useRouter()
+  const [error, setError] = useState<string | null>(null)
 
   async function onSubmit (event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -18,9 +19,10 @@ export default function Page () {
     if (response.status === 200) {
       const email = formData.get('email') as string
       router.push(`/step1/done?email=${encodeURIComponent(email)}`)
+    } else if (response.status === 404) {
+      setError('Diese E-Mail-Adresse ist uns nicht bekannt. Falls du dich nicht mehr erinnern kannst, welche E-Mail-Adresse du verwendet hast, kontaktiere uns bitte unter info@neuland-ingolstadt.de.')
     } else {
-      const { error } = await response.json()
-      alert(error)
+      setError(await response.text())
     }
   }
 
@@ -42,6 +44,7 @@ export default function Page () {
         <input type="email" name="email" required />
       </p>
       <input type="submit" value="Fortfahren" />
+      {error && <p><strong>Fehler: </strong>{error}</p>}
     </form>
   )
 }

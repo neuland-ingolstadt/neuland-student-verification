@@ -17,20 +17,28 @@ export async function POST (request: Request) {
   const email = formData.get('email') as string
   const token = formData.get('token') as string
 
-  const { email: privateEmail } = jwt.verify(token, JWT_SECRET) as ContinueToken
+  try {
+    const { email: privateEmail } = jwt.verify(token, JWT_SECRET) as ContinueToken
 
-  if (EMAIL_REGEX.test(email)) {
-    const token2 = jwt.sign({ privateEmail, email }, JWT_SECRET, { expiresIn: '1h' })
+    if (EMAIL_REGEX.test(email)) {
+      const token2 = jwt.sign({ privateEmail, email }, JWT_SECRET, { expiresIn: '1h' })
 
-    transporter.sendMail({
-      from: FROM_EMAIL,
-      to: email,
-      subject: 'Verfikation des Studierendenstatus abschließen',
-      text: `Bitte klicke auf diesen Link, um die Verifikation abzuschließen:\n${process.env.BASE_URL}step3?token=${token2}`
-    })
+      transporter.sendMail({
+        from: FROM_EMAIL,
+        to: email,
+        subject: 'Verfikation des Studierendenstatus abschließen',
+        text: `Bitte klicke auf diesen Link, um die Verifikation abzuschließen:\n${process.env.BASE_URL}step3?token=${token2}`
+      })
 
-    return Response.json({})
-  } else {
-    return Response.json({ error: 'invalid email' }, { status: 400 })
+      return new Response()
+    } else {
+      return new Response('Invalid email', { status: 400 })
+    }
+  } catch (e) {
+    if (e instanceof jwt.TokenExpiredError) {
+      return new Response('Token expired', { status: 410 })
+    } else {
+      throw e
+    }
   }
 }
