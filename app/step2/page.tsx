@@ -28,6 +28,7 @@ export default function Page () {
 
   return (
     <form onSubmit={onSubmit}>
+      <h1>Schritt 2: Hochschulzugehörigkeit überprüfen</h1>
       <p>
         Bitte gib deine THI-E-Mail-Adresse ein, um die Verifikation abzuschließen:
       </p>

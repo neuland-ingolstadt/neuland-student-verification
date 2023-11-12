@@ -26,6 +26,7 @@ export default function Page () {
 
   return (
     <form onSubmit={onSubmit}>
+      <h1>Schritt 1: Einloggen</h1>
       <p>
         Um deinen Studierendenstatus zu verifizieren, schicken wir zuerst eine E-Mail an deine private E-Mail-Adresse um deine Identität zu bestätigen.
         Danach schicken wir eine E-Mail an deine Hochschul-E-Mail-Adresse um deinen Studierendenstatus zu verifizieren.
