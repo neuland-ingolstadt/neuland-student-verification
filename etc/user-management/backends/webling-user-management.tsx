@@ -7,7 +7,7 @@ export class WeblingUserManagement implements UserManagement {
   async getUser (email: string): Promise<User | null> {
     try {
       const response: any = await fetch(
-        `${WEBLING_PATH}/member?filter='E-Mail'="${email}"`,
+        `${WEBLING_PATH}/member?filter=\`E-Mail\`="${email}"`,
         {
           method: 'GET',
           headers: {
@@ -18,7 +18,6 @@ export class WeblingUserManagement implements UserManagement {
 
       const responseJSON = await response.json()
       const memberUid = responseJSON.objects
-      console.log('memberUid', memberUid)
 
       const detailedResponse: any = await fetch(
         `${WEBLING_PATH}/member/${memberUid}`,
@@ -31,7 +30,6 @@ export class WeblingUserManagement implements UserManagement {
       )
 
       const detailedResponseJSON = await detailedResponse.json()
-      console.log('detailedResponse', detailedResponseJSON)
       const { Vorname, Name, EMail } = detailedResponseJSON.properties
 
       return { name: `${Vorname} ${Name}`, email: EMail }
@@ -45,7 +43,7 @@ export class WeblingUserManagement implements UserManagement {
     try {
       // Get the member UID by private email
       const response: any = await fetch(
-        `${WEBLING_PATH}/member?filter='E-Mail'="${encodeURIComponent(privateEmail)}"`,
+        `${WEBLING_PATH}/member?filter=\`E-Mail\`="${encodeURIComponent(privateEmail)}"`,
         {
           method: 'GET',
           headers: {
@@ -58,31 +56,29 @@ export class WeblingUserManagement implements UserManagement {
         throw new Error(`Failed to get updateUser results: ${await response.text()}`)
       }
 
-      if (response.data.length > 0) {
-        const memberUid = response.data[0].id
+      const responseJSON = await response.json()
+      const memberUid = responseJSON.objects
 
-        // Prepare the data to be updated
-        const updateData = {
-          properties: {
-            'Studenten-Mail': studentEmail,
-            'Verifiziert am': verifiedAt.toISOString() // Convert Date to ISO string
-          }
+      // Prepare the data to be updated
+      const updateData = {
+        properties: {
+          'Studierenden-Mail': studentEmail,
+          'Verifiziert am': verifiedAt.toISOString() // Convert Date to UTC string
         }
-
-        // Make the PUT request to update the user data
-        await fetch(
-          `${WEBLING_PATH}/member/${memberUid}`,
-          {
-            method: 'PUT',
-            headers: {
-              apikey: WEBLING_API_KEY
-            },
-            body: JSON.stringify(updateData)
-          }
-        )
-      } else {
-        throw new Error('User not found')
       }
+
+      // Make the PUT request to update the user data
+      await fetch(
+        `${WEBLING_PATH}/member/${memberUid}`,
+        {
+          method: 'PUT',
+          headers: {
+            apikey: WEBLING_API_KEY,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(updateData)
+        }
+      )
     } catch (error) {
       // Handle any errors that might occur during the API call
       console.error('Error updating user:', error)
