@@ -2,6 +2,9 @@ import { getUserManagement } from '@/etc/user-management'
 import jwt from 'jsonwebtoken'
 import { transporter } from '@/etc/mailer'
 
+/**
+ * Send a verification email to the users private email.
+ */
 export async function POST (request: Request) {
   const formData = await request.formData()
   const email = formData.get('email') as string

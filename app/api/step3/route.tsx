@@ -6,6 +6,9 @@ interface FinishToken extends jwt.JwtPayload {
     email: string
 }
 
+/**
+ * Mark the user as verified.
+ */
 export async function POST (request: Request) {
   const formData = await request.formData()
   const token = formData.get('token') as string

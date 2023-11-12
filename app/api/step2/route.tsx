@@ -7,6 +7,9 @@ interface ContinueToken extends jwt.JwtPayload {
     privateEmail: string
 }
 
+/**
+ * Send a verification email to the users student email.
+ */
 export async function POST (request: Request) {
   const formData = await request.formData()
   const email = formData.get('email') as string
