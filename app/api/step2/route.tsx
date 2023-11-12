@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { transporter } from '@/etc/mailer'
 
-const EMAIL_REGEX = /[a-z]{3}[0-9]{4}@thi\.de/i
+const EMAIL_REGEX = /^[a-z]{3}[0-9]{4}@thi\.de$/i
 
 interface ContinueToken extends jwt.JwtPayload {
     privateEmail: string
