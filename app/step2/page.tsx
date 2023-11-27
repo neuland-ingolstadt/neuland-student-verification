@@ -1,7 +1,13 @@
 'use client'
 
+import { Button, Progress } from '@nextui-org/react'
+import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card'
 import { FormEvent, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { Input } from '@nextui-org/input'
+import styles from '@/app/page.module.css'
+
+const CLUB_NAME = process.env.NEXT_PUBLIC_CLUB_NAME as string
 
 export default function Page () {
   const params = useSearchParams()
@@ -29,18 +35,53 @@ export default function Page () {
   }
 
   return (
-    <form onSubmit={onSubmit}>
-      <h1>Schritt 2: Hochschulzugehörigkeit überprüfen</h1>
-      <p>
-        Bitte gib deine THI-E-Mail-Adresse ein, um deine Hochschulzugehörigkeit zu überprüfen:
-      </p>
-      <p>
-        <strong>THI-E-Mail-Adresse: </strong>
-        <input type="email" name="email" required />
-      </p>
-      <input type="hidden" name="token" value={token} />
-      <input type="submit" value="Fortfahren" />
-      {error && <p><strong>Fehler: </strong>{error}</p>}
-    </form>
+    <>
+      <div>
+        <Card className={styles.container}>
+          <CardHeader>
+            <Progress
+              aria-label='Verification...'
+              size='md'
+              value={49.98}
+              color={error === null ? 'primary' : 'danger'}
+              showValueLabel={false}
+            />
+          </CardHeader>
+          <CardBody>
+            <center><h1>Schritt 2</h1></center>
+            <p>
+              Als Studierender bis du bei {CLUB_NAME} vom Mitgliedsbeitrag befreit.
+            </p>
+            <p>
+              Bitte gib deine THI-E-Mail-Adresse ein, um deine Hochschulzugehörigkeit zu überprüfen:
+            </p>
+          </CardBody>
+          <CardFooter>
+            <form onSubmit={onSubmit} className={styles.full_width}>
+              <div>
+                <Input
+                  label='THI-E-Mail-Adresse'
+                  type='email'
+                  name='email'
+                  isInvalid={(error !== null)}
+                  errorMessage={(error !== null) && 'Fehler: ' + error}
+                  required
+                />
+                <input type="hidden" name="token" value={token} />
+              </div>
+              <center>
+                <Button
+                  className={styles.button}
+                  color='primary'
+                  type='submit'
+                >
+                  Fortfahren
+                </Button>
+              </center>
+            </form>
+          </CardFooter>
+        </Card>
+      </div>
+    </>
   )
 }

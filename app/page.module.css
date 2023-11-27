@@ -7,6 +7,21 @@
   min-height: 100vh;
 }
 
+.container {
+  max-width: 75vh;
+  margin: 3vh auto;
+}
+
+.full_width {
+  width: 95%;
+  margin: auto;
+}
+
+.button {
+  width: 70%;
+  margin: 2vh auto;
+}
+
 .description {
   display: inherit;
   justify-content: inherit;
@@ -127,6 +142,10 @@
 
 /* Mobile */
 @media (max-width: 700px) {
+  .container {
+    margin: 1vh;
+  }
+
   .content {
     padding: 4rem;
   }
@@ -207,6 +226,11 @@
   .grid {
     grid-template-columns: repeat(2, 50%);
   }
+
+  .container {
+    margin: 1vh;
+  }
+
 }
 
 @media (prefers-color-scheme: dark) {
