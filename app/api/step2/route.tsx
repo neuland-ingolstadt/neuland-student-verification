@@ -27,7 +27,7 @@ export async function POST (request: Request) {
         from: FROM_EMAIL,
         to: email,
         subject: 'Verfikation des Studierendenstatus abschließen',
-        text: `Bitte klicke auf diesen Link, um die Verifikation abzuschließen:\n${process.env.BASE_URL}step3?token=${token2}`
+        html: `<div><p>Danke deine THI-E-Mail ist hiermit validiert. Bitte fahre fort und schließe die Verifikation ab.</p><br /><a href="${process.env.BASE_URL}step3?token=${token2}">Klicke hier um fortzufahren!</a></div>`
       })
 
       return new Response()
