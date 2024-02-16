@@ -13,7 +13,7 @@ const HCAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY as string
 
 export default function Page () {
   const router = useRouter()
-  const [verified, setVerified] = useState(true)
+  const [verified, setVerified] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   async function onSubmit (event: FormEvent<HTMLFormElement>) {
