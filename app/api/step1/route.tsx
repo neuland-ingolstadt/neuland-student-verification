@@ -11,7 +11,7 @@ async function verifyCaptcha (hCaptchaResponse: string): Promise<boolean> {
     method: 'POST',
     body: new URLSearchParams({
       response: hCaptchaResponse,
-      secret: process.env.NEXT_PUBLIC_HCAPTCHA_SECRET as string
+      secret: process.env.HCAPTCHA_SECRET as string
     })
   })
   if (resp.status !== 200) {
