@@ -58,7 +58,7 @@ export async function POST (request: Request) {
                   danke! Deine private E-Mail ist hiermit verifiziert.
                 </p>
                 <p>
-                  Bitte fahre hier fort, um deine Hochschulzugehörigkeit zu verifizieren: <a href="${process.env.BASE_URL}step2?token=${token}">Verifikation fortsetzen</a>
+                  Bitte fahre hier fort, um deine Hochschulzugehörigkeit zu verifizieren: <a href="${process.env.BASE_URL}/step2?token=${token}">Verifikation fortsetzen</a>
                 </p>
                 <p>
                   Liebe Grüße,<br>
