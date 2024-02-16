@@ -19,9 +19,10 @@ export default function Page () {
             />
           </CardHeader>
           <CardBody>
-            <center>
+            <h1 className="mb-2">Schritt 3: Verifikation abschließen</h1>
+            <p>
               Danke, dein Studierendenstatus wurde verifiziert!
-            </center>
+            </p>
           </CardBody>
         </Card>
       </div>

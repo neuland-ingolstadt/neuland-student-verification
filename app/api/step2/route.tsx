@@ -27,7 +27,16 @@ export async function POST (request: Request) {
         from: FROM_EMAIL,
         to: email,
         subject: 'Verfikation des Studierendenstatus abschließen',
-        html: `<div><p>Danke deine THI-E-Mail ist hiermit validiert. Bitte fahre fort und schließe die Verifikation ab.</p><br /><a href="${process.env.BASE_URL}step3?token=${token2}">Klicke hier um fortzufahren!</a></div>`
+        html: `
+          <div>
+            <p>
+              Danke! Deine THI-E-Mail ist hiermit verifiziert.
+            </p>
+            <p>
+              Bitte fahre hier fort, um die Verifikation abzuschließen: <a href="${process.env.BASE_URL}step3?token=${token2}">Verifikation abschließen</a>
+            </p>
+          </div>
+        `
       })
 
       return new Response()
@@ -37,8 +46,11 @@ export async function POST (request: Request) {
   } catch (e) {
     if (e instanceof jwt.TokenExpiredError) {
       return new Response('Token expired', { status: 410 })
+    } else if (e instanceof jwt.JsonWebTokenError) {
+      return new Response(e.message, { status: 400 })
     } else {
-      throw e
+      console.error(e)
+      return new Response('Unknown error', { status: 500 })
     }
   }
 }

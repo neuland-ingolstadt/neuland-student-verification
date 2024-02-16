@@ -6,8 +6,6 @@ import { FormEvent, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import styles from '@/app/page.module.css'
 
-const CLUB_NAME = process.env.NEXT_PUBLIC_CLUB_NAME as string
-
 export default function Page () {
   const params = useSearchParams()
   const router = useRouter()
@@ -38,16 +36,12 @@ export default function Page () {
             <Progress
               aria-label='Verification...'
               size='md'
-              value={83.3}
-              color={error === null ? 'primary' : 'danger'}
+              value={66}
               showValueLabel={false}
             />
           </CardHeader>
           <CardBody>
-            <center><h1>Schritt 3</h1></center>
-            <p>
-              Als Studierender bis du bei {CLUB_NAME} vom Mitgliedsbeitrag befreit.
-            </p>
+            <h1 className="mb-2">Schritt 3: Verifikation abschließen</h1>
             <p>
               Bitte schließe die Verifikation mit der Bestätigung deines Studierendenstatus ab.
             </p>
@@ -64,6 +58,11 @@ export default function Page () {
                 </Checkbox>
                 <input type="hidden" name="token" value={token} />
               </div>
+              {error &&
+                <p className="text-red-400">
+                  <strong>Fehler:</strong> {error}
+                </p>
+              }
               <center>
                 <Button
                   className={styles.button}

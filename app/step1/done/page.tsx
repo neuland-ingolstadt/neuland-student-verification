@@ -17,15 +17,15 @@ export default function Page () {
             <Progress
               aria-label='Verification...'
               size='md'
-              value={33.32}
-              color='success'
+              value={33}
               showValueLabel={false}
             />
           </CardHeader>
           <CardBody>
-            <center>
-              Danke, wir haben eine Email mit weiteren Anweisungen an <strong>{email}</strong> gesendet.
-            </center>
+            <h1 className="mb-2">Schritt 1: E-Mail verifizieren</h1>
+            <p>
+              Danke! Wir haben eine Email mit weiteren Anweisungen an {email} gesendet.
+            </p>
           </CardBody>
         </Card>
       </div>

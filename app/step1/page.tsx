@@ -40,25 +40,25 @@ export default function Page () {
             <Progress
               aria-label='Verification...'
               size='md'
-              value={16.66}
-              color={error === null ? 'primary' : 'danger'}
+              value={0}
               showValueLabel={false}
             />
           </CardHeader>
           <CardBody>
-            <center><h1>Schritt 1</h1></center>
-            <p>
+            <h1 className="mb-2">Schritt 1: E-Mail verifizieren</h1>
+            <p className="mb-2">
               Als Studierender bis du bei {CLUB_NAME} vom Mitgliedsbeitrag befreit.
             </p>
-            <p>
+            <p className="mb-2">
               Um deinen Studierendenstatus zu verifizieren, schicken wir zunächst eine E-Mail an deine private
               E-Mail-Adresse um deine Identität zu verifizieren.
               Danach schicken wir eine E-Mail an deine Hochschul-Mail-Adresse, um deine Hochschulzugehörigkeit zu
               überprüfen.
             </p>
             <p>
-              Bitte gibt die E-Mail-Adresse ein, die du auf deinem Mitgleidsantrag angegeben hast (nicht deine
-              @neuland-ingolstadt.de Adresse)
+              Bitte gibt die E-Mail-Adresse ein, die du auf deinem Mitgliedsantrag angegeben hast (<strong>nicht</strong> deine
+              @neuland-ingolstadt.de Adresse). Wenn du diese Adresse nicht mehr weißt, kontaktiere uns bitte unter
+              info@neuland-ingolstadt.de.
             </p>
           </CardBody>
           <CardFooter>

@@ -26,8 +26,11 @@ export async function POST (request: Request) {
   } catch (e) {
     if (e instanceof jwt.TokenExpiredError) {
       return new Response('Token expired', { status: 410 })
+    } else if (e instanceof jwt.JsonWebTokenError) {
+      return new Response(e.message, { status: 400 })
     } else {
-      throw e
+      console.error(e)
+      return new Response('Unknown error', { status: 500 })
     }
   }
 }

@@ -7,8 +7,6 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Input } from '@nextui-org/input'
 import styles from '@/app/page.module.css'
 
-const CLUB_NAME = process.env.NEXT_PUBLIC_CLUB_NAME as string
-
 export default function Page () {
   const params = useSearchParams()
   const router = useRouter()
@@ -42,18 +40,19 @@ export default function Page () {
             <Progress
               aria-label='Verification...'
               size='md'
-              value={49.98}
-              color={error === null ? 'primary' : 'danger'}
+              value={33}
               showValueLabel={false}
             />
           </CardHeader>
           <CardBody>
-            <center><h1>Schritt 2</h1></center>
-            <p>
-              Als Studierender bis du bei {CLUB_NAME} vom Mitgliedsbeitrag befreit.
+            <h1 className="mb-2">Schritt 2: Hochschulzugehörigkeit verifizieren</h1>
+            <p className="mb-2">
+              Um deine Hochschulzugehörigkeit zu verifizieren, schicken wir nun eine E-Mail an deine Hochschul-Mail-Adresse.
             </p>
-            <p>
-              Bitte gib deine THI-E-Mail-Adresse ein, um deine Hochschulzugehörigkeit zu überprüfen:
+            <p className="mb-2">
+              Bitte gib deine THI-E-Mail-Adresse ein, um deine Hochschulzugehörigkeit zu überprüfen.
+              Um Missbrauch vorzubeugen, wird diese E-Mail-Adresse in unserer Mitgliederverwaltung gespeichert.
+              Wenn du nicht an der THI studierst, kontaktiere uns bitte unter info@neuland-ingolstadt.de.
             </p>
           </CardBody>
           <CardFooter>
