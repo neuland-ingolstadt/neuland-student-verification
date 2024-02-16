@@ -34,7 +34,7 @@ export async function POST (request: Request) {
       return new Response('Failed to verify captcha', { status: 400 })
     }
 
-    const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '1h' })
+    const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '24h' })
 
     const userManagement = getUserManagement()
     const user = await userManagement.getUser(email)

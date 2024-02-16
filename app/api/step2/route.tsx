@@ -23,7 +23,7 @@ export async function POST (request: Request) {
     const { email: privateEmail } = jwt.verify(token, JWT_SECRET) as ContinueToken
 
     if (EMAIL_REGEX.test(email)) {
-      const token2 = jwt.sign({ privateEmail, email }, JWT_SECRET, { expiresIn: '1h' })
+      const token2 = jwt.sign({ privateEmail, email }, JWT_SECRET, { expiresIn: '24h' })
 
       const userManagement = getUserManagement()
       const user = await userManagement.getUser(privateEmail)
