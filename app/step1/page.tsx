@@ -3,14 +3,17 @@
 import { Button, Progress } from '@nextui-org/react'
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card'
 import { FormEvent, useState } from 'react'
+import HCaptcha from '@hcaptcha/react-hcaptcha'
 import { Input } from '@nextui-org/input'
 import styles from '@/app/page.module.css'
 import { useRouter } from 'next/navigation'
 
 const CLUB_NAME = process.env.NEXT_PUBLIC_CLUB_NAME as string
+const HCAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY as string
 
 export default function Page () {
   const router = useRouter()
+  const [verified, setVerified] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   async function onSubmit (event: FormEvent<HTMLFormElement>) {
@@ -63,7 +66,7 @@ export default function Page () {
           </CardBody>
           <CardFooter>
             <form onSubmit={onSubmit} className={styles.full_width}>
-              <div>
+              <div className="mb-2">
                 <Input
                   label='Private E-Mail-Adresse'
                   type='email'
@@ -74,10 +77,15 @@ export default function Page () {
                 />
               </div>
               <center>
+                <HCaptcha
+                  sitekey={HCAPTCHA_SITE_KEY}
+                  onVerify={(token, ekey) => setVerified(true)}
+                />
                 <Button
                   className={styles.button}
                   color='primary'
                   type='submit'
+                  isDisabled={!verified}
                 >
                   Fortfahren
                 </Button>

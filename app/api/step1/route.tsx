@@ -6,14 +6,34 @@ import { transporter } from '@/etc/mailer'
 const JWT_SECRET = process.env.JWT_SECRET!
 const FROM_EMAIL = process.env.FROM_EMAIL!
 
+async function verifyCaptcha (hCaptchaResponse: string): Promise<boolean> {
+  const resp = await fetch('https://hcaptcha.com/siteverify', {
+    method: 'POST',
+    body: new URLSearchParams({
+      response: hCaptchaResponse,
+      secret: process.env.NEXT_PUBLIC_HCAPTCHA_SECRET as string
+    })
+  })
+  if (resp.status !== 200) {
+    throw new Error('Failed to reach hCaptcha backend')
+  }
+  const body = await resp.json()
+  return body.success
+}
+
 /**
  * Send a verification email to the users private email.
  */
 export async function POST (request: Request) {
   const formData = await request.formData()
   const email = formData.get('email') as string
+  const hCaptchaResponse = formData.get('h-captcha-response') as string
 
   try {
+    if (!await verifyCaptcha(hCaptchaResponse)) {
+      return new Response('Failed to verify captcha', { status: 400 })
+    }
+
     const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '1h' })
 
     const userManagement = getUserManagement()
