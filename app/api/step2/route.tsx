@@ -33,21 +33,28 @@ export async function POST (request: Request) {
         to: email,
         subject: 'Verfikation des Studierendenstatus abschließen',
         html: `
-          <div>
-            <p>
-              Hallo ${escape(user?.name ?? 'Mensch')},
-            </p>
-            <p>
-              danke! Deine THI-E-Mail ist hiermit verifiziert.
-            </p>
-            <p>
-              Bitte fahre hier fort, um die Verifikation abzuschließen: <a href="${process.env.BASE_URL}step3?token=${token2}">Verifikation abschließen</a>
-            </p>
-            <p>
-              Liebe Grüße,<br>
-              dein Neuland-Team
-            </p>
-          </div>
+          <html>
+            <head>
+              <title></title>
+            </head>
+            <body>
+              <div>
+                <p>
+                  Hallo ${escape(user?.name ?? 'Mensch')},
+                </p>
+                <p>
+                  danke! Deine THI-E-Mail ist hiermit verifiziert.
+                </p>
+                <p>
+                  Bitte fahre hier fort, um die Verifikation abzuschließen: <a href="${process.env.BASE_URL}step3?token=${token2}">Verifikation abschließen</a>
+                </p>
+                <p>
+                  Liebe Grüße,<br>
+                  dein Neuland-Team
+                </p>
+              </div>
+            </body>
+          </html>
         `
       })
 
