@@ -2,7 +2,7 @@
 
 import { Button, Progress } from '@nextui-org/react'
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useRef, useState } from 'react'
 import HCaptcha from '@hcaptcha/react-hcaptcha'
 import { Input } from '@nextui-org/input'
 import styles from '@/app/page.module.css'
@@ -15,6 +15,7 @@ export default function Page () {
   const router = useRouter()
   const [verified, setVerified] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const captchaRef = useRef<HCaptcha | null>(null)
 
   async function onSubmit (event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -24,6 +25,8 @@ export default function Page () {
       method: 'POST',
       body: formData
     })
+
+    captchaRef.current?.resetCaptcha()
 
     if (response.status === 200) {
       const email = formData.get('email') as string
@@ -78,6 +81,7 @@ export default function Page () {
               </div>
               <center>
                 <HCaptcha
+                  ref={captchaRef}
                   sitekey={HCAPTCHA_SITE_KEY}
                   onVerify={(token, ekey) => setVerified(true)}
                 />
