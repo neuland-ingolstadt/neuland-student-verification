@@ -66,7 +66,7 @@ export async function POST (request: Request) {
     if (e instanceof jwt.TokenExpiredError) {
       return new Response('Token expired', { status: 410 })
     } else if (e instanceof jwt.JsonWebTokenError) {
-      return new Response(e.message, { status: 400 })
+      return new Response(e.message, { status: 403 })
     } else {
       console.error(e)
       return new Response('Unknown error', { status: 500 })
