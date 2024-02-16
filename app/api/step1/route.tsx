@@ -1,3 +1,4 @@
+import { escape } from 'html-escaper'
 import { getUserManagement } from '@/etc/user-management'
 import jwt from 'jsonwebtoken'
 import { transporter } from '@/etc/mailer'
@@ -16,7 +17,9 @@ export async function POST (request: Request) {
     const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '1h' })
 
     const userManagement = getUserManagement()
-    if (await userManagement.getUser(email) != null) {
+    const user = await userManagement.getUser(email)
+
+    if (user != null) {
       transporter.sendMail({
         from: FROM_EMAIL,
         to: email,
@@ -24,10 +27,17 @@ export async function POST (request: Request) {
         html: `
           <div>
             <p>
-              Danke! Deine private E-Mail ist hiermit verifiziert.
+              Hallo ${escape(user.name)},
+            </p>
+            <p>
+              danke! Deine private E-Mail ist hiermit verifiziert.
             </p>
             <p>
               Bitte fahre hier fort, um deine Hochschulzugehörigkeit zu verifizieren: <a href="${process.env.BASE_URL}step2?token=${token}">Verifikation fortsetzen</a>
+            </p>
+            <p>
+              Liebe Grüße,<br>
+              dein Neuland-Team
             </p>
           </div>
         `

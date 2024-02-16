@@ -1,3 +1,5 @@
+import { escape } from 'html-escaper'
+import { getUserManagement } from '@/etc/user-management'
 import jwt from 'jsonwebtoken'
 import { transporter } from '@/etc/mailer'
 
@@ -23,6 +25,9 @@ export async function POST (request: Request) {
     if (EMAIL_REGEX.test(email)) {
       const token2 = jwt.sign({ privateEmail, email }, JWT_SECRET, { expiresIn: '1h' })
 
+      const userManagement = getUserManagement()
+      const user = await userManagement.getUser(privateEmail)
+
       transporter.sendMail({
         from: FROM_EMAIL,
         to: email,
@@ -30,10 +35,17 @@ export async function POST (request: Request) {
         html: `
           <div>
             <p>
-              Danke! Deine THI-E-Mail ist hiermit verifiziert.
+              Hallo ${escape(user?.name ?? 'Mensch')},
+            </p>
+            <p>
+              danke! Deine THI-E-Mail ist hiermit verifiziert.
             </p>
             <p>
               Bitte fahre hier fort, um die Verifikation abzuschließen: <a href="${process.env.BASE_URL}step3?token=${token2}">Verifikation abschließen</a>
+            </p>
+            <p>
+              Liebe Grüße,<br>
+              dein Neuland-Team
             </p>
           </div>
         `

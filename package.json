@@ -10,11 +10,13 @@
   },
   "dependencies": {
     "@nextui-org/react": "^2.2.9",
+    "@types/html-escaper": "^3.0.2",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/nodemailer": "^6.4.14",
     "autoprefixer": "^10.4.16",
     "eslint-config-standard": "^17.1.0",
     "framer-motion": "^10.16.4",
+    "html-escaper": "^3.0.3",
     "jsonwebtoken": "^9.0.2",
     "modern-normalize": "^2.0.0",
     "next": "14.0.2",
