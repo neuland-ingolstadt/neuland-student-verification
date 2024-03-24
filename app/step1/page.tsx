@@ -53,7 +53,7 @@ export default function Page () {
           <CardBody>
             <h1 className="mb-2">Schritt 1: E-Mail verifizieren</h1>
             <p className="mb-2">
-              Als Studierender bis du bei {CLUB_NAME} vom Mitgliedsbeitrag befreit.
+              Als Studierender bist du bei {CLUB_NAME} vom Mitgliedsbeitrag befreit.
             </p>
             <p className="mb-2">
               Um deinen Studierendenstatus zu verifizieren, schicken wir zunächst eine E-Mail an deine private
@@ -62,7 +62,7 @@ export default function Page () {
               überprüfen.
             </p>
             <p>
-              Bitte gibt die E-Mail-Adresse ein, die du auf deinem Mitgliedsantrag angegeben hast (<strong>nicht</strong> deine
+              Bitte gib die E-Mail-Adresse ein, die du auf deinem Mitgliedsantrag angegeben hast (<strong>nicht</strong> deine
               @neuland-ingolstadt.de Adresse). Wenn du diese Adresse nicht mehr weißt, kontaktiere uns bitte unter
               info@neuland-ingolstadt.de.
             </p>
