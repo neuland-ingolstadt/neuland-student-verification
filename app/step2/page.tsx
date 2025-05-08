@@ -5,9 +5,9 @@ import { Input } from '@heroui/input'
 import { Button, Divider, Progress } from '@heroui/react'
 import { ArrowRight } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { type FormEvent, useState } from 'react'
+import { type FormEvent, Suspense, useState } from 'react'
 
-export default function Page() {
+function Page() {
   const params = useSearchParams()
   const router = useRouter()
   const [error, setError] = useState<string | null>(null)
@@ -101,5 +101,13 @@ export default function Page() {
         </Card>
       </div>
     </>
+  )
+}
+
+export default function PageWrapper() {
+  return (
+    <Suspense>
+      <Page />
+    </Suspense>
   )
 }

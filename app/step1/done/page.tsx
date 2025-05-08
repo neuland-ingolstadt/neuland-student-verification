@@ -3,8 +3,9 @@
 import { Card, CardBody, CardHeader } from '@heroui/card'
 import { Divider, Progress } from '@heroui/react'
 import { useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
 
-export default function Page() {
+function Page() {
   const searchParams = useSearchParams()
   const email = searchParams.get('email') ?? ''
 
@@ -35,5 +36,13 @@ export default function Page() {
         </Card>
       </div>
     </>
+  )
+}
+
+export default function PageWrapper() {
+  return (
+    <Suspense>
+      <Page />
+    </Suspense>
   )
 }
