@@ -1,18 +1,18 @@
 import {
   Body,
   Button,
+  Column,
   Container,
   Head,
   Heading,
+  Hr,
   Html,
   Img,
   Preview,
-  Section,
-  Text,
-  Tailwind,
-  Hr,
   Row,
-  Column,
+  Section,
+  Tailwind,
+  Text,
 } from '@react-email/components'
 
 const logoUrl = new URL(
