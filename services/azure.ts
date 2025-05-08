@@ -2,18 +2,10 @@ import { EmailClient, type EmailMessage } from '@azure/communication-email'
 import { render } from '@react-email/render'
 import type { ReactElement } from 'react'
 
-const connectionString =
-  process.env.AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING
+const connectionString = process.env
+  .AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING as string
 
-const senderAddress = process.env.FROM_EMAIL
-
-if (!connectionString) {
-  throw new Error('AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING is not set')
-}
-
-if (!senderAddress) {
-  throw new Error('FROM_EMAIL is not set')
-}
+const senderAddress = process.env.FROM_EMAIL as string
 
 const emailClient = new EmailClient(connectionString)
 
