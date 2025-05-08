@@ -1,18 +1,55 @@
-FROM node:20
+FROM node:22-alpine AS base
 
-WORKDIR /opt/next
-
-ARG NEXT_PUBLIC_CLUB_NAME
-ENV NEXT_PUBLIC_CLUB_NAME $NEXT_PUBLIC_CLUB_NAME
 ARG NEXT_PUBLIC_HCAPTCHA_SITEKEY
 ENV NEXT_PUBLIC_HCAPTCHA_SITEKEY $NEXT_PUBLIC_HCAPTCHA_SITEKEY
 
-COPY package.json package-lock.json ./
-RUN npm install
+ENV NODE_ENV=production \
+    NEXT_TELEMETRY_DISABLED=1 \
+    NEXT_SHARP_PATH=/app/node_modules/sharp \
+    PNPM_HOME="/pnpm" 
+ENV PATH="${PNPM_HOME}:${PATH}"
 
+RUN apk add --no-cache tini curl && \
+    corepack enable
+
+FROM base AS deps
+WORKDIR /app
+
+COPY package.json pnpm-lock.yaml* ./
+
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+    pnpm install --frozen-lockfile --ignore-scripts
+
+FROM base AS builder
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npm run build
 
-USER node
+RUN --mount=type=cache,id=next-cache,target=/app/.next/cache \
+    pnpm run build
+
+FROM base AS runner
+WORKDIR /app
+
+RUN addgroup -S nextjs && \
+    adduser -S nextjs -G nextjs -u 1001 && \
+    mkdir -p .next && \
+    chown nextjs:nextjs .next
+
+COPY --from=builder --chown=nextjs:nextjs /app/public ./public
+COPY --from=builder --chown=nextjs:nextjs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nextjs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nextjs /app/node_modules/sharp ./node_modules/sharp
+
+USER nextjs
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=5 \
+    CMD curl -f http://localhost:3000/ || exit 1
+
 EXPOSE 3000
-CMD ["npm", "start"]
+ENV PORT=3000 \
+    HOSTNAME="0.0.0.0"
+
+ENTRYPOINT ["/sbin/tini", "--"]
+CMD ["node", "server.js"]

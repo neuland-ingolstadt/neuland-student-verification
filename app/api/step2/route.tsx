@@ -1,75 +1,61 @@
-import { escape } from 'html-escaper'
 import { getUserManagement } from '@/etc/user-management'
+import { JWT_SECRET } from '@/lib/utils'
+import Step2VerificationEmail from '@/mail/step2'
+import { sendEmail } from '@/services/azure'
+import { escape as escapeHtml } from 'html-escaper'
 import jwt from 'jsonwebtoken'
-import { transporter } from '@/etc/mailer'
 
-const JWT_SECRET = process.env.JWT_SECRET!
-const FROM_EMAIL = process.env.FROM_EMAIL!
 const EMAIL_REGEX = /^[a-z]{3}[0-9]{4}@thi\.de$/i
 
 interface ContinueToken extends jwt.JwtPayload {
-    privateEmail: string
+  privateEmail: string
 }
 
 /**
  * Send a verification email to the users student email.
  */
-export async function POST (request: Request) {
+export async function POST(request: Request) {
   const formData = await request.formData()
   const email = formData.get('email') as string
   const token = formData.get('token') as string
 
   try {
-    const { email: privateEmail } = jwt.verify(token, JWT_SECRET) as ContinueToken
+    const { email: privateEmail } = jwt.verify(
+      token,
+      JWT_SECRET
+    ) as ContinueToken
 
     if (EMAIL_REGEX.test(email)) {
-      const token2 = jwt.sign({ privateEmail, email }, JWT_SECRET, { expiresIn: '24h' })
+      const token2 = jwt.sign({ privateEmail, email }, JWT_SECRET, {
+        expiresIn: '24h',
+      })
 
       const userManagement = getUserManagement()
       const user = await userManagement.getUser(privateEmail)
 
-      transporter.sendMail({
-        from: FROM_EMAIL,
-        to: email,
-        subject: 'Verfikation des Studierendenstatus abschließen',
-        html: `
-          <html>
-            <head>
-              <title></title>
-            </head>
-            <body>
-              <div>
-                <p>
-                  Hallo ${escape(user?.name ?? 'Mensch')},
-                </p>
-                <p>
-                  danke! Deine THI-E-Mail ist hiermit verifiziert.
-                </p>
-                <p>
-                  Bitte fahre hier fort, um die Verifikation abzuschließen: <a href="${process.env.BASE_URL}/step3?token=${token2}">Verifikation abschließen</a>
-                </p>
-                <p>
-                  Liebe Grüße,<br>
-                  dein Neuland-Team
-                </p>
-              </div>
-            </body>
-          </html>
-        `
-      })
+      const name = escapeHtml(user?.name ?? 'Mensch')
+      const verificationUrl = new URL(
+        `/step3?token=${token2}`,
+        process.env.BASE_URL || 'http://localhost:3000'
+      ).href
+
+      sendEmail(
+        email,
+        'Verifikation des Studierendenstatus abschließen',
+        <Step2VerificationEmail name={name} verificationUrl={verificationUrl} />
+      )
 
       return new Response()
-    } else {
-      return new Response('Invalid email', { status: 400 })
     }
+    return new Response('Invalid email', { status: 400 })
   } catch (e) {
     if (e instanceof jwt.TokenExpiredError) {
       return new Response('Token expired', { status: 410 })
-    } else if (e instanceof jwt.JsonWebTokenError) {
-      return new Response(e.message, { status: 403 })
-    } else {
-      console.error(e)
-      return new Response('Unknown error', { status: 500 })
     }
+    if (e instanceof jwt.JsonWebTokenError) {
+      return new Response(e.message, { status: 403 })
+    }
+    console.error(e)
+    return new Response('Unknown error', { status: 500 })
   }
 }

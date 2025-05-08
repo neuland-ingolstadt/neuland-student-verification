@@ -6,33 +6,40 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "check": "tsc --noEmit && biome check",
+    "check:fix": "biome check --fix",
+    "dev:email": "email dev --dir mail --port 3001"
   },
   "dependencies": {
+    "@azure/communication-email": "^1.0.0",
     "@hcaptcha/react-hcaptcha": "^1.10.1",
-    "@nextui-org/react": "^2.2.9",
+    "@heroui/react": "2.7.8",
+    "@react-email/components": "0.0.38",
+    "@react-email/render": "1.1.0",
+    "@types/escape-html": "^1.0.4",
     "@types/html-escaper": "^3.0.2",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/nodemailer": "^6.4.14",
     "autoprefixer": "^10.4.16",
-    "eslint-config-standard": "^17.1.0",
-    "framer-motion": "^10.16.4",
+    "framer-motion": "^12.10.4",
     "html-escaper": "^3.0.3",
     "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.508.0",
     "modern-normalize": "^2.0.0",
-    "next": "14.0.2",
+    "next": "15.3.2",
     "next-themes": "^0.2.1",
     "nodemailer": "^6.9.7",
-    "react": "^18",
-    "react-dom": "^18"
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "eslint": "^8",
-    "eslint-config-next": "14.0.2",
+    "react-email": "4.0.11",
     "tailwindcss": "^3.3.5",
     "typescript": "^5"
-  }
+  },
+  "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39"
 }

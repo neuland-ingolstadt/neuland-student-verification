@@ -1,17 +1,16 @@
 import { getUserManagement } from '@/etc/user-management'
+import { JWT_SECRET } from '@/lib/utils'
 import jwt from 'jsonwebtoken'
 
 interface FinishToken extends jwt.JwtPayload {
-    privateEmail: string
-    email: string
+  privateEmail: string
+  email: string
 }
-
-const JWT_SECRET = process.env.JWT_SECRET!
 
 /**
  * Mark the user as verified.
  */
-export async function POST (request: Request) {
+export async function POST(request: Request) {
   const formData = await request.formData()
   const token = formData.get('token') as string
 
@@ -26,11 +25,11 @@ export async function POST (request: Request) {
   } catch (e) {
     if (e instanceof jwt.TokenExpiredError) {
       return new Response('Token expired', { status: 410 })
-    } else if (e instanceof jwt.JsonWebTokenError) {
-      return new Response(e.message, { status: 403 })
-    } else {
-      console.error(e)
-      return new Response('Unknown error', { status: 500 })
     }
+    if (e instanceof jwt.JsonWebTokenError) {
+      return new Response(e.message, { status: 403 })
+    }
+    console.error(e)
+    return new Response('Unknown error', { status: 500 })
   }
 }

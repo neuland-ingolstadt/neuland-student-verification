@@ -1,26 +1,28 @@
 'use client'
 
-import { Card, CardBody, CardHeader } from '@nextui-org/card'
-import { Progress } from '@nextui-org/react'
-import styles from '@/app/page.module.css'
+import { Card, CardBody, CardHeader } from '@heroui/card'
+import { Divider, Progress } from '@heroui/react'
 
-export default function Page () {
+export default function Page() {
   return (
     <>
       <div>
-        <Card className={styles.container}>
-          <CardHeader>
+        <Card className="p-3 gap-3">
+          <CardHeader className="flex flex-col items-start gap-6">
             <Progress
-              aria-label='Verification...'
-              size='md'
+              aria-label="Verification..."
+              size="md"
               value={100}
-              color='success'
+              color="success"
               showValueLabel={false}
             />
+            <h1>Schritt 3: Verifikation abschließen</h1>
           </CardHeader>
+
+          <Divider />
+
           <CardBody>
-            <h1 className="mb-2">Schritt 3: Verifikation abschließen</h1>
-            <p>
+            <p className="font-bold">
               Danke, dein Studierendenstatus wurde verifiziert!
             </p>
           </CardBody>

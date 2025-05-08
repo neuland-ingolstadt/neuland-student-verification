@@ -18,5 +18,9 @@ export interface UserManagement {
    * @param verifiedAt The date when the student email address was verified.
    * @throws Error if the member was not found.
    */
-  updateUser(privateEmail: string, studentEmail: string, verifiedAt: Date): Promise<void>
+  updateUser(
+    privateEmail: string,
+    studentEmail: string,
+    verifiedAt: Date
+  ): Promise<void>
 }
