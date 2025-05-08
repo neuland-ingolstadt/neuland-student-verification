@@ -4,6 +4,7 @@ on: [push, workflow_call]
 
 jobs:
   check:
+    name: Check code quality
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

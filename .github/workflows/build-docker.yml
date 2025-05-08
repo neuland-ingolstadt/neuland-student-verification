@@ -11,6 +11,7 @@ env:
 
 jobs:
   test:
+    name: Check code quality
     uses: ./.github/workflows/ci.yml
   build-and-push-image:
     name: Build Docker image
