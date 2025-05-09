@@ -81,7 +81,7 @@ const Step1VerificationEmail = ({ name }: Step1VerificationEmailProps) => {
               </Text>
 
               <Button
-                href="https://verification.neuland-ingolstadt.de"
+                href="https://verification.neuland-ingolstadt.de/step1"
                 className="bg-blue-500 rounded-[4px] text-white font-medium py-[10px] px-[18px] text-[16px] no-underline text-center inline-block box-border"
               >
                 Status verifizieren
