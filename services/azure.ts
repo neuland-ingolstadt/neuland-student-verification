@@ -7,13 +7,18 @@ const connectionString = process.env
 
 const senderAddress = process.env.FROM_EMAIL as string
 
-const emailClient = new EmailClient(connectionString)
-
 export async function sendEmail(
   to: string,
   subject: string,
   body: ReactElement
 ) {
+  if (!connectionString) {
+    console.error('No connection string provided')
+    return
+  }
+
+  const emailClient = new EmailClient(connectionString)
+
   const [html, plainText] = await Promise.all([
     render(body, {
       pretty: true,

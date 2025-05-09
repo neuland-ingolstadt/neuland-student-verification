@@ -68,6 +68,9 @@ importers:
       react-dom:
         specifier: ^19.1.0
         version: 19.1.0(react@19.1.0)
+      sharp:
+        specifier: ^0.34.1
+        version: 0.34.1
     devDependencies:
       '@biomejs/biome':
         specifier: 1.9.4
@@ -5474,8 +5477,7 @@ snapshots:
 
   deepmerge@4.3.1: {}
 
-  detect-libc@2.0.4:
-    optional: true
+  detect-libc@2.0.4: {}
 
   didyoumean@1.2.2: {}
 
@@ -6105,7 +6107,6 @@ snapshots:
       '@img/sharp-wasm32': 0.34.1
       '@img/sharp-win32-ia32': 0.34.1
       '@img/sharp-win32-x64': 0.34.1
-    optional: true
 
   shebang-command@2.0.0:
     dependencies:
