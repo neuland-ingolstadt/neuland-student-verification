@@ -14,18 +14,21 @@ import {
   Tailwind,
   Text,
 } from '@react-email/components'
+// biome-ignore lint/correctness/noUnusedImports: <explanation>
+import React from 'react'
 
 const logoUrl = new URL(
   'favicon.svg',
   process.env.BASE_URL || 'http://localhost:3000'
 ).href
 
-interface Step1VerificationEmailProps {
+interface Step0VerificationEmailProps {
   name: string
-  verificationUrl: string
 }
 
-const Step1VerificationEmail = ({ name }: Step1VerificationEmailProps) => {
+const Step0VerificationEmail = ({
+  name = '%NAME%',
+}: Step0VerificationEmailProps) => {
   return (
     <Html lang="de">
       <Tailwind>
@@ -197,9 +200,8 @@ const Step1VerificationEmail = ({ name }: Step1VerificationEmailProps) => {
   )
 }
 
-Step1VerificationEmail.PreviewProps = {
+Step0VerificationEmail.PreviewProps = {
   name: 'Max Mustermann',
-  verificationUrl: 'https://example.com/step3?token=example-token',
 }
 
-export default Step1VerificationEmail
+export default Step0VerificationEmail
