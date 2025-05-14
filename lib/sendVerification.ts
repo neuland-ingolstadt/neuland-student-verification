@@ -2,7 +2,7 @@ import { sendHtmlMail } from '@/services/azure'
 import { confirm, intro, log, outro, spinner } from '@clack/prompts'
 
 import csv from 'csv-parser'
-import fs from 'node:fs'
+import fs, { writeFile } from 'node:fs'
 import colors from 'picocolors'
 
 type CsvData = {
@@ -28,35 +28,62 @@ async function sendMails(members: Member[]) {
   const successfulMails: Member[] = []
   const failedMails: Member[] = []
 
-  for (const member of members) {
-    // console.log(
-    //   `Sending email to ${member.firstName} ${member.lastName} <${member.email}>`
-    // )
-    // send email
-    // await sendVerificationEmail(member)
-    const result = await sendHtmlMail(
-      member.email,
-      'Neuland Ingolstadt e.V. - Verifizierung',
-      template.replace('%NAME%', member.firstName)
-    )
+  await Promise.all(
+    members.map(async (member) => {
+      try {
+        const result = await sendHtmlMail(
+          member.email,
+          'Verifiziere deinen Studentenstatus',
+          template.replace('%NAME%', member.firstName)
+        )
 
-    if (!result) {
-      failedMails.push(member)
-      log.error(
-        `Failed to send email to ${colors.red(
-          `${member.firstName} ${member.lastName}`
-        )} <${member.email}>`
-      )
-      continue
+        if (!result) {
+          failedMails.push(member)
+          log.error(
+            `Failed to send email to ${colors.red(
+              `${member.firstName} ${member.lastName}`
+            )} <${member.email}>`
+          )
+          return false
+        }
+
+        successfulMails.push(member)
+        return true
+      } catch (error) {
+        failedMails.push(member)
+        log.error(
+          `Error sending email to ${colors.red(
+            `${member.firstName} ${member.lastName}`
+          )} <${member.email}>: ${error}`
+        )
+        return false
+      }
+    })
+  )
+
+  writeFile(
+    './mail/data/successfulMails.json',
+    JSON.stringify(successfulMails),
+    (err) => {
+      if (err) {
+        log.error(`Error writing successfulMails.json: ${err}`)
+      } else {
+        log.success('Successfully wrote successfulMails.json')
+      }
     }
+  )
 
-    successfulMails.push(member)
-    log.success(
-      `Successfully sent email to ${colors.greenBright(
-        `${member.firstName} ${member.lastName}`
-      )} <${member.email}>`
-    )
-  }
+  writeFile(
+    './mail/data/failedMails.json',
+    JSON.stringify(failedMails),
+    (err) => {
+      if (err) {
+        log.error(`Error writing failedMails.json: ${err}`)
+      } else {
+        log.success('Successfully wrote failedMails.json')
+      }
+    }
+  )
 
   if (failedMails.length > 0) {
     log.error(
@@ -64,8 +91,6 @@ async function sendMails(members: Member[]) {
         failedMails.length.toString()
       )} members.`
     )
-  } else {
-    log.success('All emails sent successfully.')
   }
 }
 
@@ -82,7 +107,9 @@ async function readCsvFile(file: string): Promise<Member[]> {
 
     const results: Member[] = []
 
-    fs.createReadStream(file)
+    fs.createReadStream(file, {
+      encoding: 'utf-8',
+    })
       .pipe(
         csv({
           separator: ';',
@@ -149,8 +176,7 @@ async function main() {
   const s = spinner()
   s.start('⚡ Sending emails...')
   await sendMails(members)
-  s.stop('⚡ Emails sent successfully!')
-  log.success('All emails sent successfully.')
+  s.stop('⚡ Emails sent!')
 }
 
 main()

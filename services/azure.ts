@@ -98,7 +98,8 @@ export async function sendHtmlMail(
       return true
     }
     return false
-  } catch {
+  } catch (error) {
+    console.error(error)
     return false
   }
 }
