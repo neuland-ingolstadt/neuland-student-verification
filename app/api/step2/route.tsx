@@ -1,9 +1,9 @@
+import { escape as escapeHtml } from 'html-escaper'
+import jwt from 'jsonwebtoken'
 import { getUserManagement } from '@/etc/user-management'
 import { JWT_SECRET } from '@/lib/utils'
 import Step2VerificationEmail from '@/mail/step2'
 import { sendEmail } from '@/services/azure'
-import { escape as escapeHtml } from 'html-escaper'
-import jwt from 'jsonwebtoken'
 
 const EMAIL_REGEX = /^[a-z]{3}[0-9]{4}@thi\.de$/i
 

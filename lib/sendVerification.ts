@@ -1,9 +1,9 @@
-import { sendHtmlMail } from '@/services/azure'
+import fs, { writeFile } from 'node:fs'
 import { confirm, intro, log, outro, spinner } from '@clack/prompts'
 
 import csv from 'csv-parser'
-import fs, { writeFile } from 'node:fs'
 import colors from 'picocolors'
+import { sendHtmlMail } from '@/services/azure'
 
 type CsvData = {
   Vorname: string

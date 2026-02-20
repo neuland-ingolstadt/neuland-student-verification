@@ -29,55 +29,53 @@ function Page() {
   }
 
   return (
-    <>
-      <div>
-        <Card className="p-3 gap-3">
-          <CardHeader className="gap-6 items-start flex flex-col">
-            <Progress
-              aria-label="Verification..."
-              size="md"
-              value={66}
-              showValueLabel={false}
-            />
-            <h1>Schritt 3: Verifikation abschließen</h1>
-          </CardHeader>
+    <div>
+      <Card className="p-3 gap-3">
+        <CardHeader className="gap-6 items-start flex flex-col">
+          <Progress
+            aria-label="Verification..."
+            size="md"
+            value={66}
+            showValueLabel={false}
+          />
+          <h1>Schritt 3: Verifikation abschließen</h1>
+        </CardHeader>
 
-          <Divider />
+        <Divider />
 
-          <CardBody className="gap-2">
-            <p>
-              Bitte schließe die Verifikation mit der Bestätigung deines
-              Studierendenstatus ab.
-            </p>
-          </CardBody>
+        <CardBody className="gap-2">
+          <p>
+            Bitte schließe die Verifikation mit der Bestätigung deines
+            Studierendenstatus ab.
+          </p>
+        </CardBody>
 
-          <Divider />
+        <Divider />
 
-          <CardFooter>
-            <form onSubmit={onSubmit}>
-              <div className="flex flex-col gap-4">
-                <Checkbox type="checkbox" id="isStudent" required>
-                  Ich bestätige, dass ich am 15.03. dieses Jahres an der
-                  Technischen Hochschule Ingolstadt immatriukliert war oder sein
-                  werde.
-                </Checkbox>
-                <input type="hidden" name="token" value={token} />
+        <CardFooter>
+          <form onSubmit={onSubmit}>
+            <div className="flex flex-col gap-4">
+              <Checkbox type="checkbox" id="isStudent" required>
+                Ich bestätige, dass ich am 15.03. dieses Jahres an der
+                Technischen Hochschule Ingolstadt immatriukliert war oder sein
+                werde.
+              </Checkbox>
+              <input type="hidden" name="token" value={token} />
 
-                <Button color="primary" type="submit" className="w-full">
-                  <span>Fortfahren</span>
-                  <ArrowRight size={16} />
-                </Button>
-              </div>
-              {error && (
-                <p className="text-red-400">
-                  <strong>Fehler:</strong> {error}
-                </p>
-              )}
-            </form>
-          </CardFooter>
-        </Card>
-      </div>
-    </>
+              <Button color="primary" type="submit" className="w-full">
+                <span>Fortfahren</span>
+                <ArrowRight size={16} />
+              </Button>
+            </div>
+            {error && (
+              <p className="text-red-400">
+                <strong>Fehler:</strong> {error}
+              </p>
+            )}
+          </form>
+        </CardFooter>
+      </Card>
+    </div>
   )
 }
 

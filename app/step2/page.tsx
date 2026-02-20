@@ -35,72 +35,70 @@ function Page() {
   }
 
   return (
-    <>
-      <div>
-        <Card className="p-3 gap-3">
-          <CardHeader className="gap-6 items-start flex flex-col">
-            <Progress
-              aria-label="Verification..."
-              size="md"
-              value={33}
-              showValueLabel={false}
-            />
+    <div>
+      <Card className="p-3 gap-3">
+        <CardHeader className="gap-6 items-start flex flex-col">
+          <Progress
+            aria-label="Verification..."
+            size="md"
+            value={33}
+            showValueLabel={false}
+          />
 
-            <h1>Schritt 2: Hochschulzugehörigkeit verifizieren</h1>
-          </CardHeader>
+          <h1>Schritt 2: Hochschulzugehörigkeit verifizieren</h1>
+        </CardHeader>
 
-          <Divider />
+        <Divider />
 
-          <CardBody className="gap-2">
-            <p>
-              Um deine Hochschulzugehörigkeit zu verifizieren, schicken wir nun
-              eine E-Mail an deine Hochschul-Mail-Adresse.
-            </p>
-            <p>
-              Bitte gib deine THI-E-Mail-Adresse ein, um deine
-              Hochschulzugehörigkeit zu überprüfen. Um Missbrauch vorzubeugen,
-              wird diese E-Mail-Adresse in unserer Mitgliederverwaltung
-              gespeichert.
-            </p>
+        <CardBody className="gap-2">
+          <p>
+            Um deine Hochschulzugehörigkeit zu verifizieren, schicken wir nun
+            eine E-Mail an deine Hochschul-Mail-Adresse.
+          </p>
+          <p>
+            Bitte gib deine THI-E-Mail-Adresse ein, um deine
+            Hochschulzugehörigkeit zu überprüfen. Um Missbrauch vorzubeugen,
+            wird diese E-Mail-Adresse in unserer Mitgliederverwaltung
+            gespeichert.
+          </p>
 
-            <p className="text-gray-500">
-              Wenn du nicht an der THI studierst, kontaktiere uns bitte unter{' '}
-              <a
-                href="mailto:info@neuland-ingolstadt.de"
-                className="text-blue-500"
-              >
-                info@neuland-ingolstadt.de
-              </a>
-              .
-            </p>
-          </CardBody>
+          <p className="text-gray-500">
+            Wenn du nicht an der THI studierst, kontaktiere uns bitte unter{' '}
+            <a
+              href="mailto:info@neuland-ingolstadt.de"
+              className="text-blue-500"
+            >
+              info@neuland-ingolstadt.de
+            </a>
+            .
+          </p>
+        </CardBody>
 
-          <Divider />
+        <Divider />
 
-          <CardFooter>
-            <form onSubmit={onSubmit} className="w-full">
-              <div className="flex flex-col gap-2">
-                <Input
-                  label="THI-E-Mail-Adresse"
-                  type="email"
-                  name="email"
-                  isInvalid={error !== null}
-                  errorMessage={error !== null && `Fehler: ${error}`}
-                  required
-                  onInput={() => setError(null)}
-                />
-                <input type="hidden" name="token" value={token} />
+        <CardFooter>
+          <form onSubmit={onSubmit} className="w-full">
+            <div className="flex flex-col gap-2">
+              <Input
+                label="THI-E-Mail-Adresse"
+                type="email"
+                name="email"
+                isInvalid={error !== null}
+                errorMessage={error !== null && `Fehler: ${error}`}
+                required
+                onInput={() => setError(null)}
+              />
+              <input type="hidden" name="token" value={token} />
 
-                <Button color="primary" type="submit" className="w-full">
-                  <span>Fortfahren</span>
-                  <ArrowRight size={16} />
-                </Button>
-              </div>
-            </form>
-          </CardFooter>
-        </Card>
-      </div>
-    </>
+              <Button color="primary" type="submit" className="w-full">
+                <span>Fortfahren</span>
+                <ArrowRight size={16} />
+              </Button>
+            </div>
+          </form>
+        </CardFooter>
+      </Card>
+    </div>
   )
 }
 

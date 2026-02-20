@@ -43,90 +43,87 @@ export default function Page() {
   }
 
   return (
-    <>
-      <div>
-        <Card className="p-3 gap-3">
-          <CardHeader className="flex flex-col items-start gap-6">
-            <Progress
-              aria-label="Verification..."
-              size="md"
-              value={0}
-              showValueLabel={false}
-            />
-            <h1>Schritt 1: E-Mail verifizieren</h1>
-          </CardHeader>
+    <div>
+      <Card className="p-3 gap-3">
+        <CardHeader className="flex flex-col items-start gap-6">
+          <Progress
+            aria-label="Verification..."
+            size="md"
+            value={0}
+            showValueLabel={false}
+          />
+          <h1>Schritt 1: E-Mail verifizieren</h1>
+        </CardHeader>
 
-          <Divider />
+        <Divider />
 
-          <CardBody className="gap-2">
-            <p className="font-semibold">
-              Als Studierender bist du bei Neuland Ingolstadt e.V. vom
-              Mitgliedsbeitrag befreit.
-            </p>
-            <p>
-              Um deinen Studierendenstatus zu verifizieren, schicken wir
-              zunächst eine E-Mail an deine private E-Mail-Adresse um deine
-              Identität zu verifizieren. Danach schicken wir eine E-Mail an
-              deine Hochschul-Mail-Adresse, um deine Hochschulzugehörigkeit zu
-              überprüfen.
-            </p>
-            <p>
-              Bitte gib die E-Mail-Adresse ein, die du auf deinem
-              Mitgliedsantrag angegeben hast (<strong>nicht</strong> deine
-              @neuland-ingolstadt.de Adresse).
-              <br />
-            </p>
+        <CardBody className="gap-2">
+          <p className="font-semibold">
+            Als Studierender bist du bei Neuland Ingolstadt e.V. vom
+            Mitgliedsbeitrag befreit.
+          </p>
+          <p>
+            Um deinen Studierendenstatus zu verifizieren, schicken wir zunächst
+            eine E-Mail an deine private E-Mail-Adresse um deine Identität zu
+            verifizieren. Danach schicken wir eine E-Mail an deine
+            Hochschul-Mail-Adresse, um deine Hochschulzugehörigkeit zu
+            überprüfen.
+          </p>
+          <p>
+            Bitte gib die E-Mail-Adresse ein, die du auf deinem Mitgliedsantrag
+            angegeben hast (<strong>nicht</strong> deine @neuland-ingolstadt.de
+            Adresse).
+            <br />
+          </p>
 
-            <p className="text-gray-500">
-              Wenn du diese Adresse nicht mehr weißt, kontaktiere uns bitte
-              unter{' '}
-              <a
-                href="mailto:info@neuland-ingolstadt.de"
-                className="text-blue-500"
-              >
-                info@neuland-ingolstadt.de
-              </a>
-              .
-            </p>
-          </CardBody>
+          <p className="text-gray-500">
+            Wenn du diese Adresse nicht mehr weißt, kontaktiere uns bitte unter{' '}
+            <a
+              href="mailto:info@neuland-ingolstadt.de"
+              className="text-blue-500"
+            >
+              info@neuland-ingolstadt.de
+            </a>
+            .
+          </p>
+        </CardBody>
 
-          <Divider />
+        <Divider />
 
-          <CardFooter>
-            <form onSubmit={onSubmit} className="w-full">
-              <div className="mb-2">
-                <Input
-                  label="Private E-Mail-Adresse"
-                  type="email"
-                  name="email"
-                  isInvalid={error !== null}
-                  errorMessage={error !== null && `Fehler: ${error}`}
-                  onInput={() => setError(null)}
-                  required
+        <CardFooter>
+          <form onSubmit={onSubmit} className="w-full">
+            <div className="mb-2">
+              <Input
+                label="Private E-Mail-Adresse"
+                type="email"
+                name="email"
+                isInvalid={error !== null}
+                errorMessage={error !== null && `Fehler: ${error}`}
+                onInput={() => setError(null)}
+                required
+              />
+            </div>
+            <center>
+              {!IGNORE_HCAPTCHA && (
+                <HCaptcha
+                  ref={captchaRef}
+                  sitekey={HCAPTCHA_SITE_KEY}
+                  onVerify={(_token, _ekey) => setVerified(true)}
                 />
-              </div>
-              <center>
-                {!IGNORE_HCAPTCHA && (
-                  <HCaptcha
-                    ref={captchaRef}
-                    sitekey={HCAPTCHA_SITE_KEY}
-                    onVerify={(_token, _ekey) => setVerified(true)}
-                  />
-                )}
-                <Button
-                  color="primary"
-                  type="submit"
-                  className="w-full"
-                  isDisabled={!verified && !IGNORE_HCAPTCHA}
-                >
-                  <span>Fortfahren</span>
-                  <ArrowRight size={16} />
-                </Button>
-              </center>
-            </form>
-          </CardFooter>
-        </Card>
-      </div>
-    </>
+              )}
+              <Button
+                color="primary"
+                type="submit"
+                className="w-full"
+                isDisabled={!verified && !IGNORE_HCAPTCHA}
+              >
+                <span>Fortfahren</span>
+                <ArrowRight size={16} />
+              </Button>
+            </center>
+          </form>
+        </CardFooter>
+      </Card>
+    </div>
   )
 }

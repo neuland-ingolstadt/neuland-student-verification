@@ -1,9 +1,9 @@
+import { escape as escapeHtml } from 'html-escaper'
+import jwt from 'jsonwebtoken'
 import { getUserManagement } from '@/etc/user-management'
 import { JWT_SECRET } from '@/lib/utils'
 import Step1VerificationEmail from '@/mail/step1'
 import { sendEmail } from '@/services/azure'
-import { escape as escapeHtml } from 'html-escaper'
-import jwt from 'jsonwebtoken'
 
 async function verifyCaptcha(hCaptchaResponse: string): Promise<boolean> {
   if (process.env.NEXT_PUBLIC_IGNORE_HCAPTCHA === 'true') {

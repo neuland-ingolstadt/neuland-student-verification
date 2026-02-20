@@ -1,6 +1,6 @@
+import jwt from 'jsonwebtoken'
 import { getUserManagement } from '@/etc/user-management'
 import { JWT_SECRET } from '@/lib/utils'
-import jwt from 'jsonwebtoken'
 
 interface FinishToken extends jwt.JwtPayload {
   privateEmail: string
