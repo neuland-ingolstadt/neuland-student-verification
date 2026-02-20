@@ -1,10 +1,16 @@
 name: Code quality
 
-on: [push, workflow_call]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    branches:
+      - main
 
 jobs:
   check:
-    name: Check code quality
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -13,7 +19,7 @@ jobs:
       - name: Setup Biome
         uses: biomejs/setup-biome@v2
         with:
-          version: latest
+          token: ${{ github.token }}
 
       - name: Run Biome
         run: biome ci . --line-ending=lf
