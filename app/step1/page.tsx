@@ -59,8 +59,8 @@ export default function Page() {
 
         <CardBody className="gap-2">
           <p className="font-semibold">
-            Als Studierender zahlst du bei Neuland Ingolstadt e.V. einen ermäßigten
-            Mitgliedsbeitrag.
+            Als Studierender zahlst du bei Neuland Ingolstadt e.V. einen
+            ermäßigten Mitgliedsbeitrag.
           </p>
           <p>
             Um deinen Studierendenstatus zu verifizieren, schicken wir zunächst
