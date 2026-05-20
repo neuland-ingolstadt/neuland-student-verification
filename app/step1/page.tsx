@@ -53,7 +53,7 @@ export default function Page () {
           <CardBody>
             <h1 className="mb-2">Schritt 1: E-Mail verifizieren</h1>
             <p className="mb-2">
-              Als Studierender bist du bei {CLUB_NAME} vom Mitgliedsbeitrag befreit.
+              Als Studierender zahlst du bei {CLUB_NAME} einen ermäßigten Mitgliedsbeitrag.
             </p>
             <p className="mb-2">
               Um deinen Studierendenstatus zu verifizieren, schicken wir zunächst eine E-Mail an deine private
