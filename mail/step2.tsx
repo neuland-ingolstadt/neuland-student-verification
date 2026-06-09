@@ -128,11 +128,11 @@ const Step2VerificationEmail = ({
                     </Text>
                     <Text className="text-[14px] leading-[22px] text-gray-600 m-0">
                       <span className="text-gray-500">Zweiter Vorstand:</span>{' '}
-                      Timo Weese
+                      Nico Märtin
                     </Text>
                     <Text className="text-[14px] leading-[22px] text-gray-600 m-0">
                       <span className="text-gray-500">Dritter Vorstand:</span>{' '}
-                      Philipp Opheys
+                      Ronja Meitz
                     </Text>
                   </Column>
                 </Row>
