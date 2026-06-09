@@ -57,7 +57,7 @@ function Page() {
             <div className="flex flex-col gap-4">
               <Checkbox type="checkbox" id="isStudent" required>
                 Ich bestätige, dass ich am 15.03. dieses Jahres an der
-                Technischen Hochschule Ingolstadt immatriukliert war oder sein
+                Technischen Hochschule Ingolstadt immatrikuliert war oder sein
                 werde.
               </Checkbox>
               <input type="hidden" name="token" value={token} />
