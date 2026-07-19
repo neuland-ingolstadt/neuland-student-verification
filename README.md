@@ -19,7 +19,7 @@ The Neuland Student Verification System is a multi-step verification process tha
 - **Token-based Security**: JWT tokens with expiration for secure verification links
 - **Bulk Email Support**: CLI tool for sending initial verification emails to members
 - **Docker Support**: Containerized deployment with multi-stage builds
-- **Modern Tech Stack**: Built with Next.js 15, React 19, and TypeScript
+- **Modern Tech Stack**: Built with Next.js 16, React 19, and TypeScript
 
 ## 🚀 Quick Start
 
@@ -76,9 +76,10 @@ The Neuland Student Verification System is a multi-step verification process tha
 
 ### Tech Stack
 
-- **Framework**: Next.js 15 (App Router)
+- **Framework**: Next.js 16 (App Router, Server Actions)
 - **Frontend**: React 19, TypeScript, Tailwind CSS
-- **UI Components**: HeroUI (NextUI)
+- **UI Components**: shadcn/ui (Radix UI)
+- **Forms**: React Hook Form with Zod validation
 - **Email**: React Email, Azure Communication Services
 - **Authentication**: JSON Web Tokens (JWT)
 - **Security**: hCaptcha
@@ -89,10 +90,10 @@ The Neuland Student Verification System is a multi-step verification process tha
 
 ```
 ├── app/                    # Next.js app router
-│   ├── api/               # API routes for each verification step
-│   ├── step1/             # Email verification UI
-│   ├── step2/             # Student email verification UI
-│   └── step3/             # Final confirmation UI
+│   ├── step1/             # Email verification UI + server action
+│   ├── step2/             # Student email verification UI + server action
+│   └── step3/             # Final confirmation UI + server action
+├── components/            # Shared UI components (shadcn/ui)
 ├── etc/                   # External service integrations
 │   └── user-management/   # Member management backends
 ├── lib/                   # Utility functions
@@ -190,8 +191,8 @@ services:
 - **CAPTCHA Protection**: Prevents automated abuse
 - **JWT Token Security**: Time-limited verification tokens (24h expiration)
 - **Email Validation**: Strict THI email format validation (`abc1234@thi.de`)
+- **Server-side Validation**: All inputs re-validated in server actions with Zod
 - **Rate Limiting**: Built-in Next.js protections
-- **Input Sanitization**: HTML escaping for user inputs
 
 ## 🛠️ Development
 
