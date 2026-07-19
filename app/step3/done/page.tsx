@@ -1,31 +1,17 @@
 'use client'
 
-import { Card, CardBody, CardHeader } from '@heroui/card'
-import { Divider, Progress } from '@heroui/react'
+import { StepCard } from '@/components/step-card'
 
 export default function Page() {
   return (
-    <div>
-      <Card className="p-3 gap-3">
-        <CardHeader className="flex flex-col items-start gap-6">
-          <Progress
-            aria-label="Verification..."
-            size="md"
-            value={100}
-            color="success"
-            showValueLabel={false}
-          />
-          <h1>Schritt 3: Verifikation abschließen</h1>
-        </CardHeader>
-
-        <Divider />
-
-        <CardBody>
-          <p className="font-bold">
-            Danke, dein Studierendenstatus wurde verifiziert!
-          </p>
-        </CardBody>
-      </Card>
-    </div>
+    <StepCard
+      progress={100}
+      title="Schritt 3: Verifikation abschließen"
+      progressClassName="[&_[data-slot=progress-indicator]]:bg-emerald-600"
+    >
+      <p className="font-bold">
+        Danke, dein Studierendenstatus wurde verifiziert!
+      </p>
+    </StepCard>
   )
 }

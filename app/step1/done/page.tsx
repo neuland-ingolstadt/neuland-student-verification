@@ -1,39 +1,22 @@
 'use client'
 
-import { Card, CardBody, CardHeader } from '@heroui/card'
-import { Divider, Progress } from '@heroui/react'
 import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
+import { StepCard } from '@/components/step-card'
 
 function Page() {
   const searchParams = useSearchParams()
   const email = searchParams.get('email') ?? ''
 
   return (
-    <div>
-      <Card className="p-3 gap-3">
-        <CardHeader className="flex flex-col items-start gap-6">
-          <Progress
-            aria-label="Verification..."
-            size="md"
-            value={33}
-            showValueLabel={false}
-          />
-          <h1>Schritt 1: E-Mail verifizieren</h1>
-        </CardHeader>
+    <StepCard progress={33} title="Schritt 1: E-Mail verifizieren">
+      <p className="font-semibold">Danke!</p>
 
-        <Divider />
-
-        <CardBody className="gap-2">
-          <p className="font-semibold">Danke!</p>
-
-          <p>
-            Wir haben eine Email mit weiteren Anweisungen an{' '}
-            <span className="text-blue-500">{email}</span> gesendet.
-          </p>
-        </CardBody>
-      </Card>
-    </div>
+      <p>
+        Wir haben eine Email mit weiteren Anweisungen an{' '}
+        <span className="text-blue-500">{email}</span> gesendet.
+      </p>
+    </StepCard>
   )
 }
 

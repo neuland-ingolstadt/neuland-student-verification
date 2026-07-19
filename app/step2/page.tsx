@@ -1,104 +1,136 @@
 'use client'
 
-import { Card, CardBody, CardFooter, CardHeader } from '@heroui/card'
-import { Input } from '@heroui/input'
-import { Button, Divider, Progress } from '@heroui/react'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowRight } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { type FormEvent, Suspense, useState } from 'react'
+import { Suspense } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import * as z from 'zod'
+import { StepCard } from '@/components/step-card'
+import { Button } from '@/components/ui/button'
+import { Field, FieldError, FieldLabel } from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
+import type { Step2Error } from '@/lib/action-result'
+import { submitStep2 } from './actions'
+
+const formSchema = z.object({
+  email: z
+    .string()
+    .regex(
+      /^[a-z]{3}[0-9]{4}@thi\.de$/i,
+      'Das sieht nicht aus, wie die E-Mail eines Studierenden der Technischen Hochschule Ingolstadt. Deine E-Mail muss das Schema abc1234@thi.de besitzen.'
+    ),
+})
+
+type FormValues = z.infer<typeof formSchema>
+
+const ERROR_MESSAGES: Record<Step2Error, string> = {
+  invalid_email:
+    'Das sieht nicht aus, wie die E-Mail eines Studierenden der Technischen Hochschule Ingolstadt. Deine E-Mail muss das Schema abc1234@thi.de besitzen.',
+  token_expired:
+    'Der Link ist abgelaufen. Bitte starte die Verifikation von vorne.',
+  token_invalid:
+    'Der Link ist ungültig. Bitte verwende den Link aus unserer E-Mail.',
+  unknown:
+    'Ein unbekannter Fehler ist aufgetreten. Bitte versuche es später erneut.',
+}
 
 function Page() {
   const params = useSearchParams()
   const router = useRouter()
-  const [error, setError] = useState<string | null>(null)
   const token = params.get('token') ?? ''
 
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: '',
+    },
+  })
 
-    const formData = new FormData(event.currentTarget)
-    const response = await fetch('/api/step2', {
-      method: 'POST',
-      body: formData,
-    })
+  async function onSubmit(data: FormValues) {
+    const result = await submitStep2(token, data.email)
 
-    if (response.status === 200) {
-      const email = formData.get('email') as string
-      router.push(`/step2/done?email=${encodeURIComponent(email)}`)
-    } else if (response.status === 400) {
-      setError(
-        'Das sieht nicht aus, wie die E-Mail eines Studierenden der Technischen Hochschule Ingolstadt. Deine E-Mail muss das Schema abc1234@thi.de besitzen.'
-      )
+    if (result.ok) {
+      router.push(`/step2/done?email=${encodeURIComponent(data.email)}`)
     } else {
-      setError(await response.text())
+      form.setError('root', { message: ERROR_MESSAGES[result.error] })
     }
   }
 
   return (
-    <div>
-      <Card className="p-3 gap-3">
-        <CardHeader className="gap-6 items-start flex flex-col">
-          <Progress
-            aria-label="Verification..."
-            size="md"
-            value={33}
-            showValueLabel={false}
-          />
+    <StepCard
+      progress={33}
+      title="Schritt 2: Hochschulzugehörigkeit verifizieren"
+      footer={
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="w-full"
+          noValidate
+        >
+          <div className="flex flex-col gap-2">
+            <Controller
+              name="email"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="email">THI-E-Mail-Adresse</FieldLabel>
+                  <Input
+                    {...field}
+                    id="email"
+                    type="email"
+                    autoComplete="email"
+                    aria-invalid={fieldState.invalid}
+                    onChange={(event) => {
+                      field.onChange(event)
+                      form.clearErrors('root')
+                    }}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+            {form.formState.errors.root && (
+              <FieldError>
+                Fehler: {form.formState.errors.root.message}
+              </FieldError>
+            )}
 
-          <h1>Schritt 2: Hochschulzugehörigkeit verifizieren</h1>
-        </CardHeader>
-
-        <Divider />
-
-        <CardBody className="gap-2">
-          <p>
-            Um deine Hochschulzugehörigkeit zu verifizieren, schicken wir nun
-            eine E-Mail an deine Hochschul-Mail-Adresse.
-          </p>
-          <p>
-            Bitte gib deine THI-E-Mail-Adresse ein, um deine
-            Hochschulzugehörigkeit zu überprüfen. Um Missbrauch vorzubeugen,
-            wird diese E-Mail-Adresse in unserer Mitgliederverwaltung
-            gespeichert.
-          </p>
-
-          <p className="text-gray-500">
-            Wenn du nicht an der THI studierst, kontaktiere uns bitte unter{' '}
-            <a
-              href="mailto:info@neuland-ingolstadt.de"
-              className="text-blue-500"
+            <Button
+              variant="default"
+              type="submit"
+              className="w-full"
+              disabled={form.formState.isSubmitting}
             >
-              info@neuland-ingolstadt.de
-            </a>
-            .
-          </p>
-        </CardBody>
+              <span>Fortfahren</span>
+              <ArrowRight size={16} />
+            </Button>
+          </div>
+        </form>
+      }
+    >
+      <p>
+        Um deine Hochschulzugehörigkeit zu verifizieren, schicken wir nun eine
+        E-Mail an deine Hochschul-Mail-Adresse.
+      </p>
+      <p>
+        Bitte gib deine THI-E-Mail-Adresse ein, um deine Hochschulzugehörigkeit
+        zu überprüfen. Um Missbrauch vorzubeugen, wird diese E-Mail-Adresse in
+        unserer Mitgliederverwaltung gespeichert.
+      </p>
 
-        <Divider />
-
-        <CardFooter>
-          <form onSubmit={onSubmit} className="w-full">
-            <div className="flex flex-col gap-2">
-              <Input
-                label="THI-E-Mail-Adresse"
-                type="email"
-                name="email"
-                isInvalid={error !== null}
-                errorMessage={error !== null && `Fehler: ${error}`}
-                required
-                onInput={() => setError(null)}
-              />
-              <input type="hidden" name="token" value={token} />
-
-              <Button color="primary" type="submit" className="w-full">
-                <span>Fortfahren</span>
-                <ArrowRight size={16} />
-              </Button>
-            </div>
-          </form>
-        </CardFooter>
-      </Card>
-    </div>
+      <p className="text-gray-500">
+        Wenn du nicht an der THI studierst, kontaktiere uns bitte unter{' '}
+        <a
+          href="mailto:info@neuland-ingolstadt.de"
+          className="text-emerald-600"
+        >
+          info@neuland-ingolstadt.de
+        </a>
+        .
+      </p>
+    </StepCard>
   )
 }
 

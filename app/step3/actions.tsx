@@ -1,5 +1,8 @@
+'use server'
+
 import jwt from 'jsonwebtoken'
 import { getUserManagement } from '@/etc/user-management'
+import type { ActionResult, Step3Error } from '@/lib/action-result'
 import { JWT_SECRET } from '@/lib/utils'
 
 interface FinishToken extends jwt.JwtPayload {
@@ -10,10 +13,9 @@ interface FinishToken extends jwt.JwtPayload {
 /**
  * Mark the user as verified.
  */
-export async function POST(request: Request) {
-  const formData = await request.formData()
-  const token = formData.get('token') as string
-
+export async function submitStep3(
+  token: string
+): Promise<ActionResult<Step3Error>> {
   try {
     const { email, privateEmail } = jwt.verify(token, JWT_SECRET) as FinishToken
 
@@ -21,15 +23,15 @@ export async function POST(request: Request) {
 
     await userManagement.updateUser(privateEmail, email, new Date())
 
-    return new Response()
+    return { ok: true }
   } catch (e) {
     if (e instanceof jwt.TokenExpiredError) {
-      return new Response('Token expired', { status: 410 })
+      return { ok: false, error: 'token_expired' }
     }
     if (e instanceof jwt.JsonWebTokenError) {
-      return new Response(e.message, { status: 403 })
+      return { ok: false, error: 'token_invalid' }
     }
     console.error(e)
-    return new Response('Unknown error', { status: 500 })
+    return { ok: false, error: 'unknown' }
   }
 }

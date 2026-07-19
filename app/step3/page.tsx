@@ -1,81 +1,122 @@
 'use client'
 
-import { Card, CardBody, CardFooter, CardHeader } from '@heroui/card'
-import { Button, Checkbox, Divider, Progress } from '@heroui/react'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowRight } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { type FormEvent, Suspense, useState } from 'react'
+import { Suspense } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import * as z from 'zod'
+import { StepCard } from '@/components/step-card'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Field, FieldError, FieldLabel } from '@/components/ui/field'
+import type { Step3Error } from '@/lib/action-result'
+import { submitStep3 } from './actions'
+
+const formSchema = z.object({
+  confirmed: z
+    .boolean()
+    .refine(
+      (value) => value,
+      'Bitte bestätige deinen Studierendenstatus, um fortzufahren.'
+    ),
+})
+
+type FormValues = z.infer<typeof formSchema>
+
+const ERROR_MESSAGES: Record<Step3Error, string> = {
+  token_expired:
+    'Der Link ist abgelaufen. Bitte starte die Verifikation von vorne.',
+  token_invalid:
+    'Der Link ist ungültig. Bitte verwende den Link aus unserer E-Mail.',
+  unknown:
+    'Ein unbekannter Fehler ist aufgetreten. Bitte versuche es später erneut.',
+}
 
 function Page() {
   const params = useSearchParams()
   const router = useRouter()
-  const [error, setError] = useState<string | null>(null)
   const token = params.get('token') ?? ''
 
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      confirmed: false,
+    },
+  })
 
-    const formData = new FormData(event.currentTarget)
-    const response = await fetch('/api/step3', {
-      method: 'POST',
-      body: formData,
-    })
+  async function onSubmit(_data: FormValues) {
+    const result = await submitStep3(token)
 
-    if (response.status === 200) {
+    if (result.ok) {
       router.push('/step3/done')
     } else {
-      setError(await response.text())
+      form.setError('root', { message: ERROR_MESSAGES[result.error] })
     }
   }
 
   return (
-    <div>
-      <Card className="p-3 gap-3">
-        <CardHeader className="gap-6 items-start flex flex-col">
-          <Progress
-            aria-label="Verification..."
-            size="md"
-            value={66}
-            showValueLabel={false}
-          />
-          <h1>Schritt 3: Verifikation abschließen</h1>
-        </CardHeader>
-
-        <Divider />
-
-        <CardBody className="gap-2">
-          <p>
-            Bitte schließe die Verifikation mit der Bestätigung deines
-            Studierendenstatus ab.
-          </p>
-        </CardBody>
-
-        <Divider />
-
-        <CardFooter>
-          <form onSubmit={onSubmit}>
-            <div className="flex flex-col gap-4">
-              <Checkbox type="checkbox" id="isStudent" required>
-                Ich bestätige, dass ich am 15.03. dieses Jahres an der
-                Technischen Hochschule Ingolstadt immatrikuliert war oder sein
-                werde.
-              </Checkbox>
-              <input type="hidden" name="token" value={token} />
-
-              <Button color="primary" type="submit" className="w-full">
-                <span>Fortfahren</span>
-                <ArrowRight size={16} />
-              </Button>
-            </div>
-            {error && (
-              <p className="text-red-400">
-                <strong>Fehler:</strong> {error}
-              </p>
+    <StepCard
+      progress={66}
+      title="Schritt 3: Verifikation abschließen"
+      footer={
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="w-full"
+          noValidate
+        >
+          <div className="flex flex-col gap-4">
+            <Controller
+              name="confirmed"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <Field orientation="horizontal">
+                    <Checkbox
+                      id="isStudent"
+                      checked={field.value}
+                      aria-invalid={fieldState.invalid}
+                      onCheckedChange={(checked) => {
+                        field.onChange(checked === true)
+                        form.clearErrors('root')
+                      }}
+                    />
+                    <FieldLabel htmlFor="isStudent" className="font-normal">
+                      Ich bestätige, dass ich am 15.03. dieses Jahres an der
+                      Technischen Hochschule Ingolstadt immatrikuliert war oder
+                      sein werde.
+                    </FieldLabel>
+                  </Field>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+            {form.formState.errors.root && (
+              <FieldError>
+                Fehler: {form.formState.errors.root.message}
+              </FieldError>
             )}
-          </form>
-        </CardFooter>
-      </Card>
-    </div>
+
+            <Button
+              variant="default"
+              type="submit"
+              className="w-full"
+              disabled={form.formState.isSubmitting}
+            >
+              <span>Fortfahren</span>
+              <ArrowRight size={16} />
+            </Button>
+          </div>
+        </form>
+      }
+    >
+      <p>
+        Bitte schließe die Verifikation mit der Bestätigung deines
+        Studierendenstatus ab.
+      </p>
+    </StepCard>
   )
 }
 

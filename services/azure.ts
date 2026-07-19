@@ -1,6 +1,6 @@
 import { EmailClient, type EmailMessage } from '@azure/communication-email'
-import { render } from '@react-email/render'
 import type { ReactElement } from 'react'
+import { render } from 'react-email'
 
 const connectionString = process.env
   .AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING as string

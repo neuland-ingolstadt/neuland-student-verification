@@ -1,5 +1,15 @@
-onlyBuiltDependencies:
-  - '@biomejs/biome'
-  - '@heroui/shared-utils'
-  - esbuild
-  - sharp
+blockExoticSubdeps: true
+minimumReleaseAge: 10080
+minimumReleaseAgeExclude:
+  - webpack
+  - react
+  - react-dom
+  - next
+  - "@next/*"
+trustPolicy: no-downgrade
+trustPolicyIgnoreAfter: 20160
+allowBuilds:
+  esbuild: set this to true or false
+  msw: true
+  sharp: true
+  unrs-resolver: set this to true or false

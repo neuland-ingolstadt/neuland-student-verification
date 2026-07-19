@@ -1,6 +1,9 @@
-import { escape as escapeHtml } from 'html-escaper'
+'use server'
+
 import jwt from 'jsonwebtoken'
+import * as z from 'zod'
 import { getUserManagement } from '@/etc/user-management'
+import type { ActionResult, Step1Error } from '@/lib/action-result'
 import { JWT_SECRET } from '@/lib/utils'
 import Step1VerificationEmail from '@/mail/step1'
 import { sendEmail } from '@/services/azure'
@@ -27,14 +30,17 @@ async function verifyCaptcha(hCaptchaResponse: string): Promise<boolean> {
 /**
  * Send a verification email to the users private email.
  */
-export async function POST(request: Request) {
-  const formData = await request.formData()
-  const email = formData.get('email') as string
-  const hCaptchaResponse = formData.get('h-captcha-response') as string
+export async function submitStep1(
+  email: string,
+  captchaToken: string
+): Promise<ActionResult<Step1Error>> {
+  if (!z.email().safeParse(email).success) {
+    return { ok: false, error: 'invalid_email' }
+  }
 
   try {
-    if (!(await verifyCaptcha(hCaptchaResponse))) {
-      return new Response('Failed to verify captcha', { status: 400 })
+    if (!(await verifyCaptcha(captchaToken))) {
+      return { ok: false, error: 'captcha' }
     }
 
     const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '24h' })
@@ -42,25 +48,26 @@ export async function POST(request: Request) {
     const userManagement = getUserManagement()
     const user = await userManagement.getUser(email)
 
+    if (user == null) {
+      return { ok: false, error: 'not_found' }
+    }
+
     const verificationUrl = new URL(
       `/step2?token=${token}`,
       process.env.BASE_URL || 'http://localhost:3000'
     ).href
 
-    if (user != null) {
-      const name = escapeHtml(user.name)
-
-      sendEmail(
-        email,
-        'Verifikation des Studierendenstatus fortsetzen',
-        <Step1VerificationEmail name={name} verificationUrl={verificationUrl} />
-      )
-      return new Response()
-    }
-
-    return new Response('User not found', { status: 404 })
+    sendEmail(
+      email,
+      'Verifikation des Studierendenstatus fortsetzen',
+      <Step1VerificationEmail
+        name={user.name}
+        verificationUrl={verificationUrl}
+      />
+    )
+    return { ok: true }
   } catch (e) {
     console.error(e)
-    return new Response('Unknown error', { status: 500 })
+    return { ok: false, error: 'unknown' }
   }
 }

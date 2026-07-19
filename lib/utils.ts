@@ -1,4 +1,9 @@
-const JWT_SECRET = process.env.JWT_SECRET || ''
-const FROM_EMAIL = process.env.FROM_EMAIL || ''
+import { type ClassValue, clsx } from 'clsx'
+import { twMerge } from 'tailwind-merge'
 
-export { JWT_SECRET, FROM_EMAIL }
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+
+export const JWT_SECRET = process.env.JWT_SECRET || ''
+export const FROM_EMAIL = process.env.FROM_EMAIL || ''
