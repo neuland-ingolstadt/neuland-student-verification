@@ -1,23 +1,16 @@
 'use client'
 
-import HCaptcha from '@hcaptcha/react-hcaptcha'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ArrowRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { StepCard } from '@/components/step-card'
-import { Button } from '@/components/ui/button'
+import { SubmitButton } from '@/components/submit-button'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import type { Step1Error } from '@/lib/action-result'
+import { verifyClient } from '@/lib/altcha/client'
 import { submitStep1 } from './actions'
-
-const HCAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY as string
-
-const IGNORE_HCAPTCHA =
-  (process.env.NEXT_PUBLIC_IGNORE_HCAPTCHA || 'false') === 'true'
 
 const formSchema = z.object({
   email: z.email('Bitte gib eine gültige E-Mail-Adresse ein.'),
@@ -26,18 +19,19 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>
 
 const ERROR_MESSAGES: Record<Step1Error, string> = {
-  captcha: 'Captcha-Verifizierung fehlgeschlagen. Bitte versuche es erneut.',
+  captcha:
+    'Die Bot-Schutz-Verifizierung ist fehlgeschlagen. Bitte versuche es erneut.',
   invalid_email: 'Bitte gib eine gültige E-Mail-Adresse ein.',
   not_found:
     'Diese E-Mail-Adresse ist uns nicht bekannt. Falls du dich nicht mehr erinnern kannst, welche E-Mail-Adresse du verwendet hast, kontaktiere uns bitte unter info@neuland-ingolstadt.de.',
+  backend:
+    'Unsere Mitgliederverwaltung ist derzeit nicht erreichbar. Bitte versuche es später erneut oder kontaktiere uns unter info@neuland-ingolstadt.de.',
   unknown:
     'Ein unbekannter Fehler ist aufgetreten. Bitte versuche es später erneut.',
 }
 
 export default function Page() {
   const router = useRouter()
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
-  const captchaRef = useRef<HCaptcha | null>(null)
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -47,10 +41,17 @@ export default function Page() {
   })
 
   async function onSubmit(data: FormValues) {
-    const result = await submitStep1(data.email, captchaToken ?? '')
+    const altcha = await verifyClient()
 
-    captchaRef.current?.resetCaptcha()
-    setCaptchaToken(null)
+    if (!altcha.solution) {
+      form.setError('root', { message: ERROR_MESSAGES.captcha })
+      return
+    }
+
+    const result = await submitStep1(data.email, {
+      challenge: altcha.challenge,
+      solution: altcha.solution,
+    })
 
     if (result.ok) {
       router.push(`/step1/done?email=${encodeURIComponent(data.email)}`)
@@ -102,26 +103,13 @@ export default function Page() {
             )}
           </div>
           <div className="flex flex-col items-center gap-2">
-            {!IGNORE_HCAPTCHA && (
-              <HCaptcha
-                ref={captchaRef}
-                sitekey={HCAPTCHA_SITE_KEY}
-                onVerify={(token) => setCaptchaToken(token)}
-                onExpire={() => setCaptchaToken(null)}
-              />
-            )}
-            <Button
-              variant="default"
-              type="submit"
-              className="w-full"
-              disabled={
-                (!captchaToken && !IGNORE_HCAPTCHA) ||
-                form.formState.isSubmitting
+            <SubmitButton
+              loading={
+                form.formState.isSubmitting || form.formState.isSubmitSuccessful
               }
             >
-              <span>Fortfahren</span>
-              <ArrowRight size={16} />
-            </Button>
+              Fortfahren
+            </SubmitButton>
           </div>
         </form>
       }

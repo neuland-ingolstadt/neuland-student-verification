@@ -1,6 +1,7 @@
 'use server'
 
 import jwt from 'jsonwebtoken'
+import { EasyVereinApiError } from '@/etc/easyverein'
 import { getUserManagement } from '@/etc/user-management'
 import type { ActionResult, Step3Error } from '@/lib/action-result'
 import { JWT_SECRET } from '@/lib/utils'
@@ -32,6 +33,9 @@ export async function submitStep3(
       return { ok: false, error: 'token_invalid' }
     }
     console.error(e)
+    if (e instanceof EasyVereinApiError) {
+      return { ok: false, error: 'backend' }
+    }
     return { ok: false, error: 'unknown' }
   }
 }

@@ -1,13 +1,12 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ArrowRight } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { StepCard } from '@/components/step-card'
-import { Button } from '@/components/ui/button'
+import { SubmitButton } from '@/components/submit-button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import type { Step3Error } from '@/lib/action-result'
@@ -29,6 +28,8 @@ const ERROR_MESSAGES: Record<Step3Error, string> = {
     'Der Link ist abgelaufen. Bitte starte die Verifikation von vorne.',
   token_invalid:
     'Der Link ist ungültig. Bitte verwende den Link aus unserer E-Mail.',
+  backend:
+    'Unsere Mitgliederverwaltung ist derzeit nicht erreichbar. Bitte versuche es später erneut oder kontaktiere uns unter info@neuland-ingolstadt.de.',
   unknown:
     'Ein unbekannter Fehler ist aufgetreten. Bitte versuche es später erneut.',
 }
@@ -99,15 +100,13 @@ function Page() {
               </FieldError>
             )}
 
-            <Button
-              variant="default"
-              type="submit"
-              className="w-full"
-              disabled={form.formState.isSubmitting}
+            <SubmitButton
+              loading={
+                form.formState.isSubmitting || form.formState.isSubmitSuccessful
+              }
             >
-              <span>Fortfahren</span>
-              <ArrowRight size={16} />
-            </Button>
+              Fortfahren
+            </SubmitButton>
           </div>
         </form>
       }

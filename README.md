@@ -13,8 +13,8 @@ The Neuland Student Verification System is a multi-step verification process tha
 ## ✨ Features
 
 - **Multi-step Verification**: Secure 3-step process with email verification
-- **CAPTCHA Protection**: hCaptcha integration to prevent automated abuse
-- **Member Management Integration**: Supports EasyVerein and Webling backends
+- **Bot Protection**: Altcha proof-of-work challenge to prevent automated abuse
+- **Member Management Integration**: EasyVerein backend
 - **Professional Email Templates**: Beautiful, responsive email designs using React Email
 - **Token-based Security**: JWT tokens with expiration for secure verification links
 - **Bulk Email Support**: CLI tool for sending initial verification emails to members
@@ -28,8 +28,7 @@ The Neuland Student Verification System is a multi-step verification process tha
 - Node.js 22 or higher
 - pnpm package manager
 - Azure Communication Services account (for email delivery)
-- Member management system (EasyVerein or Webling)
-- hCaptcha account (optional, can be disabled for development)
+- EasyVerein account with API access
 
 ### Installation
 
@@ -58,10 +57,8 @@ The Neuland Student Verification System is a multi-step verification process tha
    BASE_URL=http://localhost:3000
    AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING=your_azure_connection_string
    JWT_SECRET=your_jwt_secret
-   BACKEND=easyverein  # or 'webling'
    EASYVEREIN_API_KEY=your_api_key
-   NEXT_PUBLIC_HCAPTCHA_SITEKEY=your_hcaptcha_sitekey
-   HCAPTCHA_SECRET=your_hcaptcha_secret
+   ALTCHA_SECRET=your_altcha_secret  # generate with: openssl rand -base64 32
    ```
 
 4. **Start development server**
@@ -82,7 +79,7 @@ The Neuland Student Verification System is a multi-step verification process tha
 - **Forms**: React Hook Form with Zod validation
 - **Email**: React Email, Azure Communication Services
 - **Authentication**: JSON Web Tokens (JWT)
-- **Security**: hCaptcha
+- **Security**: Altcha (self-hosted proof-of-work bot protection)
 - **Deployment**: Docker, Node.js
 - **Code Quality**: Biome (linting & formatting)
 
@@ -123,23 +120,12 @@ pnpm export
 
 ## 🔧 Member Management Integration
 
-### Supported Backends
-
-#### EasyVerein
+Member data is managed through EasyVerein:
 
 ```env
-BACKEND=easyverein
 EASYVEREIN_API_KEY=your_api_key
 EASYVEREIN_EMAIL_CF=custom_field_id
 EASYVEREIN_DATE_CF=custom_field_id
-```
-
-#### Webling
-
-```env
-BACKEND=webling
-WEBLING_API_KEY=your_api_key
-WEBLING_PATH=https://your-org.webling.ch/api/1
 ```
 
 ## 📨 Bulk Email Sending
@@ -181,14 +167,13 @@ services:
       - BASE_URL=https://verification.yourdomain.com
       - AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING=your_connection_string
       - JWT_SECRET=your_jwt_secret
-      - BACKEND=easyverein
       - EASYVEREIN_API_KEY=your_api_key
     restart: unless-stopped
 ```
 
 ## 🔒 Security Features
 
-- **CAPTCHA Protection**: Prevents automated abuse
+- **Bot Protection**: Altcha proof-of-work challenge prevents automated abuse without third-party services or cookies
 - **JWT Token Security**: Time-limited verification tokens (24h expiration)
 - **Email Validation**: Strict THI email format validation (`abc1234@thi.de`)
 - **Server-side Validation**: All inputs re-validated in server actions with Zod
@@ -228,12 +213,8 @@ pnpm check:fix
 | `BASE_URL` | Application base URL | ✅ |
 | `AZURE_COMMUNICATION_SERVICE_CONNECTION_STRING` | Azure email service | ✅ |
 | `JWT_SECRET` | Secret for signing JWT tokens | ✅ |
-| `BACKEND` | Member management system (`easyverein` or `webling`) | ✅ |
-| `EASYVEREIN_API_KEY` | EasyVerein API key | If using EasyVerein |
-| `WEBLING_API_KEY` | Webling API key | If using Webling |
-| `NEXT_PUBLIC_HCAPTCHA_SITEKEY` | hCaptcha site key | Recommended |
-| `HCAPTCHA_SECRET` | hCaptcha secret key | Recommended |
-| `NEXT_PUBLIC_IGNORE_HCAPTCHA` | Disable CAPTCHA for development | Optional |
+| `EASYVEREIN_API_KEY` | EasyVerein API key | ✅ |
+| `ALTCHA_SECRET` | HMAC secret for Altcha challenges (`openssl rand -base64 32`) | ✅ |
 
 ## 🤝 Contributing
 

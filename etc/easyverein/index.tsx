@@ -20,6 +20,20 @@ export interface EasyVereinCustomField {
 }
 
 /**
+ * Thrown when the easyVerein API responds with an unexpected status code,
+ * e.g. 401 when the API token has expired or been revoked.
+ */
+export class EasyVereinApiError extends Error {
+  readonly status: number
+
+  constructor(status: number, body: string) {
+    super(`easyVerein API responded with status ${status}: ${body}`)
+    this.name = 'EasyVereinApiError'
+    this.status = status
+  }
+}
+
+/**
  * A minimalistic client for easyVerein.
  */
 export class EasyVereinClient {
@@ -92,7 +106,7 @@ export class EasyVereinClient {
       const response = await this.get(nextPath, params)
 
       if (response.status !== 200) {
-        throw new Error(`Failed to get paged results: ${await response.text()}`)
+        throw new EasyVereinApiError(response.status, await response.text())
       }
 
       const { results, next } = await response.json()
@@ -136,7 +150,7 @@ export class EasyVereinClient {
       return await response.json()
     }
 
-    throw new Error(`Failed to get contact details: ${await response.text()}`)
+    throw new EasyVereinApiError(response.status, await response.text())
   }
 
   /**
@@ -169,7 +183,7 @@ export class EasyVereinClient {
     )
 
     if (response.status !== 201) {
-      throw new Error(`Failed to create custom field: ${await response.text()}`)
+      throw new EasyVereinApiError(response.status, await response.text())
     }
   }
 
@@ -190,7 +204,7 @@ export class EasyVereinClient {
     )
 
     if (response.status !== 200) {
-      throw new Error(`Failed to update custom field: ${await response.text()}`)
+      throw new EasyVereinApiError(response.status, await response.text())
     }
   }
 }
