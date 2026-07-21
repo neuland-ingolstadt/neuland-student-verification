@@ -2,7 +2,7 @@
 
 import jwt from 'jsonwebtoken'
 import { EasyVereinApiError } from '@/etc/easyverein'
-import { getUserManagement } from '@/etc/user-management'
+import { getUser } from '@/etc/easyverein/user-management'
 import type { ActionResult, Step2Error } from '@/lib/action-result'
 import { JWT_SECRET } from '@/lib/utils'
 import Step2VerificationEmail from '@/mail/step2'
@@ -35,8 +35,7 @@ export async function submitStep2(
       expiresIn: '24h',
     })
 
-    const userManagement = getUserManagement()
-    const user = await userManagement.getUser(privateEmail)
+    const user = await getUser(privateEmail)
 
     const verificationUrl = new URL(
       `/step3?token=${token2}`,

@@ -92,7 +92,7 @@ The Neuland Student Verification System is a multi-step verification process tha
 │   └── step3/             # Final confirmation UI + server action
 ├── components/            # Shared UI components (shadcn/ui)
 ├── etc/                   # External service integrations
-│   └── user-management/   # Member management backends
+│   └── easyverein/        # easyVerein API client + member management
 ├── lib/                   # Utility functions
 ├── mail/                  # Email templates (React Email)
 ├── services/              # External service clients

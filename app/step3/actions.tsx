@@ -2,7 +2,7 @@
 
 import jwt from 'jsonwebtoken'
 import { EasyVereinApiError } from '@/etc/easyverein'
-import { getUserManagement } from '@/etc/user-management'
+import { updateUser } from '@/etc/easyverein/user-management'
 import type { ActionResult, Step3Error } from '@/lib/action-result'
 import { JWT_SECRET } from '@/lib/utils'
 
@@ -20,9 +20,7 @@ export async function submitStep3(
   try {
     const { email, privateEmail } = jwt.verify(token, JWT_SECRET) as FinishToken
 
-    const userManagement = getUserManagement()
-
-    await userManagement.updateUser(privateEmail, email, new Date())
+    await updateUser(privateEmail, email, new Date())
 
     return { ok: true }
   } catch (e) {

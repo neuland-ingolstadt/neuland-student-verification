@@ -3,7 +3,7 @@
 import jwt from 'jsonwebtoken'
 import * as z from 'zod'
 import { EasyVereinApiError } from '@/etc/easyverein'
-import { getUserManagement } from '@/etc/user-management'
+import { getUser } from '@/etc/easyverein/user-management'
 import type { ActionResult, Step1Error } from '@/lib/action-result'
 import { AltchaClient } from '@/lib/altcha/server'
 import { type AltchaData, altchaSchema } from '@/lib/schemas/altchaSchema'
@@ -33,8 +33,7 @@ export async function submitStep1(
 
     const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '24h' })
 
-    const userManagement = getUserManagement()
-    const user = await userManagement.getUser(email)
+    const user = await getUser(email)
 
     if (user == null) {
       return { ok: false, error: 'not_found' }
