@@ -6,6 +6,8 @@ minimumReleaseAgeExclude:
   - react-dom
   - next
   - "@next/*"
+  # Renovate security update: sharp@0.35.0
+  - sharp@0.35.0
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 20160
 allowBuilds:
