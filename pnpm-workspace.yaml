@@ -6,6 +6,8 @@ minimumReleaseAgeExclude:
   - react-dom
   - next
   - "@next/*"
+  # Renovate security update: postcss@8.5.23
+  - postcss@8.5.23
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 20160
 allowBuilds:
