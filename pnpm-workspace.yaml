@@ -6,6 +6,8 @@ minimumReleaseAgeExclude:
   - react-dom
   - next
   - "@next/*"
+  # Renovate security update: nodemailer@10.0.6
+  - nodemailer@10.0.6
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 20160
 allowBuilds:
