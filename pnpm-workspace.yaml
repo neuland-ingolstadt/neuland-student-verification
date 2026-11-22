@@ -10,6 +10,8 @@ minimumReleaseAgeExclude:
   - postcss@8.5.23
   # Renovate security update: sharp@0.35.5
   - sharp@0.35.5
+  # Renovate security update: zod@4.6.6
+  - zod@4.6.6
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 20160
 allowBuilds:
