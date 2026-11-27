@@ -15,7 +15,7 @@
   "dependencies": {
     "@azure/communication-email": "^1.1.0",
     "@clack/prompts": "^1.0.0",
-    "@hookform/resolvers": "^5.4.0",
+    "@hookform/resolvers": "^7.0.0",
     "@react-email/ui": "^6.7.0",
     "@tailwindcss/postcss": "^4.3.2",
     "altcha-lib": "^2.2.0",
