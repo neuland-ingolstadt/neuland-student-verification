@@ -12,6 +12,8 @@ minimumReleaseAgeExclude:
   - sharp@0.35.5
   # Renovate security update: zod@4.6.6
   - zod@4.6.6
+  # Renovate security update: nodemailer@10.1.4
+  - nodemailer@10.1.4
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 20160
 allowBuilds:
